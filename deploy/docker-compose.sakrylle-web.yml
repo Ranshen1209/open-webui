@@ -1,0 +1,40 @@
+# Sakrylle Web (open-webui fork) - Docker Compose configuration
+# Deploy alongside the main stack at /opt/stack/
+#
+# Usage:
+#   docker compose -f docker-compose.sakrylle-web.yml up -d
+#
+# Prerequisites:
+#   1. Create /opt/stack/sakrylle-web/.env (mode 600) with required env vars
+#   2. Create /opt/stack/sakrylle-web/static/ with brand assets
+#   3. Configure Nginx (see deploy/nginx/sakrylle-web.conf)
+#   4. DNS: chat.sakrylle.com → 64.83.47.108
+
+services:
+  sakrylle-web:
+    image: ghcr.io/ranshen1209/sakrylle-web:latest
+    container_name: sakrylle-web
+    restart: unless-stopped
+    volumes:
+      - sakrylle-web-data:/app/backend/data
+      - /opt/stack/sakrylle-web/static:/app/backend/open_webui/static/static:ro
+    env_file:
+      - /opt/stack/sakrylle-web/.env
+    networks:
+      - stack_default
+    ports:
+      - "127.0.0.1:3080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  sakrylle-web-data:
+    name: stack_sakrylle-web-data
+
+networks:
+  stack_default:
+    external: true
