@@ -8,7 +8,14 @@ last_verified: 2026-06-06
 
 # Sakrylle Web Implementation Status
 
-Current documentation status: **implementation updated locally; Sakrylle SSO still requires IdP client registration, deployment secrets, and staging smoke tests.**
+Current documentation status: **local implementation has been completed and pushed on `theme/sakrylle` at `be4448136`; automated local verification passed before commit; Sakrylle SSO still requires IdP client registration, deployment secrets, and staging smoke tests.**
+
+Latest repository progress:
+
+- Open WebUI Sakrylle OIDC/branding changes were committed and pushed to `origin/theme/sakrylle` in commit `be4448136` (`feat: complete Sakrylle OIDC branding integration`).
+- Local verification completed before the commit: frontend build, `npm run check`, frontend test command, backend Python formatting check, targeted Python compile check, and `git diff --check` all passed.
+- The pushed implementation keeps Sakrylle Web on the generic Authlib `oidc` provider path and uses deployment configuration for confidential-client SSO-only behavior.
+- Shared center docs in `../sub2api` were reviewed/updated during implementation, but that separate repository was not committed or pushed from this Web repository session because its working tree contained unrelated/untracked documentation state that needs separate review.
 
 Canonical platform status lives in [Sakrylle OIDC current state](../../sub2api/sakrylle-docs/10-platform-identity/current-state.md). This file only tracks product-local readiness and gaps.
 
