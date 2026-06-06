@@ -2854,11 +2854,12 @@ async def get_manifest_json():
     else:
         return {
             'name': app.state.WEBUI_NAME,
-            'short_name': app.state.WEBUI_NAME,
-            'description': f'{app.state.WEBUI_NAME} is an open, extensible, user-friendly interface for AI that adapts to your workflow.',
+            'short_name': 'Sakrylle' if app.state.WEBUI_NAME == 'Sakrylle Web' else app.state.WEBUI_NAME,
+            'description': f'{app.state.WEBUI_NAME} is Sakrylle’s AI workspace for chat, tools, and model access.',
             'start_url': '/',
             'display': 'standalone',
-            'background_color': '#343541',
+            'background_color': '#1a1a2e',
+            'theme_color': '#9181bd',
             'icons': [
                 {
                     'src': '/static/logo.png',

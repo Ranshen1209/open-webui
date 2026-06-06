@@ -402,10 +402,17 @@ OPENAI_API_BASE_URLS = [
 ]
 OPENAI_API_BASE_URLS = ConfigVar('OPENAI_API_BASE_URLS', 'openai.api_base_urls', OPENAI_API_BASE_URLS)
 
+try:
+    OPENAI_API_CONFIGS_ENV = os.getenv('OPENAI_API_CONFIGS', '{}')
+    OPENAI_API_CONFIGS_DEFAULT = json.loads(OPENAI_API_CONFIGS_ENV) if OPENAI_API_CONFIGS_ENV else {}
+except Exception as e:
+    log.exception(f'Error loading OPENAI_API_CONFIGS: {e}')
+    OPENAI_API_CONFIGS_DEFAULT = {}
+
 OPENAI_API_CONFIGS = ConfigVar(
     'OPENAI_API_CONFIGS',
     'openai.api_configs',
-    {},
+    OPENAI_API_CONFIGS_DEFAULT,
 )
 
 # Get the actual OpenAI API key based on the base URL

@@ -809,6 +809,31 @@ async def signout(request: Request, response: Response, db: AsyncSession = Depen
         response.delete_cookie('oauth_session_id')
 
         session = await OAuthSessions.get_session_by_id(oauth_session_id, db=db)
+        await OAuthSessions.delete_session_by_id(oauth_session_id, db=db)
+        oauth_id_token = session.token.get('id_token') if session else None
+
+        def build_provider_logout_url(logout_url: str) -> str:
+            query_params = {}
+            if oauth_id_token:
+                query_params['id_token_hint'] = oauth_id_token
+            if WEBUI_AUTH_SIGNOUT_REDIRECT_URL:
+                query_params['post_logout_redirect_uri'] = WEBUI_AUTH_SIGNOUT_REDIRECT_URL
+
+            if not query_params:
+                return logout_url
+
+            parsed = urllib.parse.urlsplit(logout_url)
+            query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+            query.extend(query_params.items())
+            return urllib.parse.urlunsplit(
+                (
+                    parsed.scheme,
+                    parsed.netloc,
+                    parsed.path,
+                    urllib.parse.urlencode(query),
+                    parsed.fragment,
+                )
+            )
 
         # If a custom end_session_endpoint is configured (e.g. AWS Cognito), redirect
         # there directly instead of attempting OIDC discovery.
@@ -817,7 +842,7 @@ async def signout(request: Request, response: Response, db: AsyncSession = Depen
                 status_code=200,
                 content={
                     'status': True,
-                    'redirect_url': OPENID_END_SESSION_ENDPOINT.value,
+                    'redirect_url': build_provider_logout_url(OPENID_END_SESSION_ENDPOINT.value),
                 },
                 headers=response.headers,
             )
@@ -827,7 +852,6 @@ async def signout(request: Request, response: Response, db: AsyncSession = Depen
         ) or OPENID_PROVIDER_URL.value
 
         if session and oauth_server_metadata_url:
-            oauth_id_token = session.token.get('id_token')
             try:
                 async with ClientSession(trust_env=True) as session:
                     async with session.get(oauth_server_metadata_url, ssl=AIOHTTP_CLIENT_SESSION_SSL) as r:
@@ -840,12 +864,7 @@ async def signout(request: Request, response: Response, db: AsyncSession = Depen
                                     status_code=200,
                                     content={
                                         'status': True,
-                                        'redirect_url': f'{logout_url}?id_token_hint={oauth_id_token}'
-                                        + (
-                                            f'&post_logout_redirect_uri={WEBUI_AUTH_SIGNOUT_REDIRECT_URL}'
-                                            if WEBUI_AUTH_SIGNOUT_REDIRECT_URL
-                                            else ''
-                                        ),
+                                        'redirect_url': build_provider_logout_url(logout_url),
                                     },
                                     headers=response.headers,
                                 )
@@ -854,11 +873,7 @@ async def signout(request: Request, response: Response, db: AsyncSession = Depen
 
             except Exception as e:
                 log.error(f'OpenID signout error: {str(e)}')
-                raise HTTPException(
-                    status_code=500,
-                    detail='Failed to sign out from the OpenID provider.',
-                    headers=response.headers,
-                )
+                log.warning('Continuing with local signout after OpenID provider logout failed.')
 
     if WEBUI_AUTH_SIGNOUT_REDIRECT_URL:
         return JSONResponse(

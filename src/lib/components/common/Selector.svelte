@@ -1,4 +1,6 @@
 <script lang="ts">
+	import i18n from '$lib/i18n';
+
 	import ChevronDown from '../icons/ChevronDown.svelte';
 	import Check from '../icons/Check.svelte';
 	import Search from '../icons/Search.svelte';

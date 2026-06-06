@@ -1,1 +1,24 @@
-{}
+{
+  "name": "Sakrylle Web",
+  "short_name": "Sakrylle",
+  "description": "Sakrylle Web is Sakrylle’s AI workspace for chat, tools, and model access.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#9181bd",
+  "icons": [
+    {
+      "src": "/static/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

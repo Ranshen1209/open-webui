@@ -8,22 +8,39 @@ last_verified: 2026-06-06
 
 # Sakrylle Web Implementation Status
 
-Current documentation status: **partial: open-webui Authlib/OIDC substrate exists; Sakrylle SSO enablement must be verified by deployment config and smoke tests.**
+Current documentation status: **implementation updated locally; Sakrylle SSO still requires IdP client registration, deployment secrets, and staging smoke tests.**
 
 Canonical platform status lives in [Sakrylle OIDC current state](../../sub2api/sakrylle-docs/10-platform-identity/current-state.md). This file only tracks product-local readiness and gaps.
 
 ## Product-local readiness checklist
 
-- [ ] Local configuration points are documented in [local-integration.md](./local-integration.md).
-- [ ] Product-specific OAuth/OIDC callback or scheme is documented.
-- [ ] Token storage behavior is documented.
-- [ ] Login, refresh, revoke/logout, and profile mapping smoke tests are documented.
-- [ ] Known security gaps are linked to product implementation tasks.
+- [x] Local configuration points are documented in [local-integration.md](./local-integration.md).
+- [x] Product-specific OAuth/OIDC callback is documented: `/oauth/oidc/login/callback`.
+- [x] Token storage behavior is documented: encrypted server-side `oauth_session` rows plus local browser auth/session cookies.
+- [x] SSO-only deployment settings are represented in `deploy/env.example`.
+- [x] Sakrylle Web manifest/static brand assets are present in tracked static paths and documented in `static/brand/README.md`.
+- [ ] Sakrylle API IdP has an approved `sakrylle-web` confidential client registration for the deployment callback URI.
+- [ ] Deployment `.env` has production secrets and URLs installed outside the repository.
+- [ ] Login, refresh/access-token use, revoke/logout, and profile mapping smoke tests have been run in staging or production.
 
-## Suggested verification
+## Code readiness
 
-- Check `/api/config` exposes the intended OAuth/OIDC provider state.
-- Start login via `/oauth/oidc/login` and verify redirect to Sakrylle issuer.
+- Backend OIDC remains the generic Authlib provider path; no Sakrylle-only provider branch is required.
+- `/manifest.json` now returns Sakrylle Web metadata and colors when using the built-in manifest route.
+- `/api/v1/auths/signout` clears local state, deletes the stored OAuth session row, and returns a provider logout URL when one is configured or discovered.
+- `OPENAI_API_CONFIGS` can now be initialized from env JSON so deployments can set the Sakrylle API connection to `system_oauth` without using a static API key.
+- Frontend notification/page title surfaces use the runtime WebUI name where product-facing.
+
+## Required runtime verification
+
+- Check `/api/config` exposes `oauth.providers.oidc` with the intended Sakrylle SSO label and `oauth.auto_redirect=true`.
+- Start login via `/oauth/oidc/login` and verify redirect to the Sakrylle issuer.
 - Complete callback in a staging/local environment and confirm encrypted OAuth session storage.
-- Verify `/userinfo` / profile mapping and logout behavior.
+- Verify OpenAI-compatible calls to `https://api.sakrylle.com/v1` use the logged-in user's OAuth access token when `OPENAI_API_CONFIGS={"0":{"auth_type":"system_oauth"}}` is configured.
+- Verify `/userinfo` / profile mapping and `/api/v1/auths/signout` IdP logout behavior.
+- Verify `/manifest.json`, `/static/favicon.svg`, `/static/favicon.png`, `/static/splash.png`, and `/static/logo.png` show Sakrylle branding.
 
+## Remaining blockers
+
+- Production IdP client registration and secret installation are external deployment actions and require separate approval.
+- Automated tests do not prove real OIDC login/logout; staging smoke testing is required.
