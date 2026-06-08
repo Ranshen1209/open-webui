@@ -1,0 +1,40 @@
+---
+description: Essential dev, lint, test, and Docker commands
+alwaysApply: true
+---
+
+# Essential Commands
+
+## Frontend (Node.js >= 18.13.0, <= 22.x)
+
+```bash
+npm run dev           # Vite dev server + Pyodide fetch (localhost:5173)
+npm run dev:5050      # Same on port 5050
+npm run build         # Production build (runs pyodide:fetch first)
+npm run check         # Type-check with svelte-check
+npm run lint          # ESLint + svelte-check + pylint
+npm run lint:frontend # ESLint only (auto-fix)
+npm run lint:backend  # pylint backend/
+npm run format        # Prettier (frontend)
+npm run format:backend # Ruff format (backend)
+npm run test:frontend # Vitest
+npm run i18n:parse    # Re-parse i18n translation keys
+```
+
+## Backend (Python >= 3.11, < 3.13)
+
+```bash
+open-webui serve --host 0.0.0.0 --port 8080
+uvicorn open_webui.main:app --host 0.0.0.0 --port 8080 --reload
+pytest test/ -k "test_name"
+pylint backend/
+ruff format . --exclude .venv && ruff check .
+```
+
+## Docker
+
+```bash
+docker compose up -d
+docker compose up -d --build
+make install  # same as docker compose up -d
+```

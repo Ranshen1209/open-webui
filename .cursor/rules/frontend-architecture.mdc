@@ -1,0 +1,23 @@
+---
+description: SvelteKit frontend layout and conventions
+globs: src/**
+alwaysApply: false
+---
+
+# Frontend (`src/`)
+
+**Framework:** SvelteKit + `@sveltejs/adapter-static` → `build/`, served by FastAPI as SPA.
+
+## Routing (`src/routes/`)
+
+- `(app)/` — authenticated layout: `home/`, `workspace/`, `admin/`, `c/` (chat), `notes/`, `calendar/`, `channels/`, `playground/`, `automations/`
+- `auth/` — login/signup/SSO
+- `s/` — shared public chats
+- `watch/` — WebRTC watch page
+
+## Key directories
+
+- `src/lib/stores/index.ts` — `user`, `config`, `socket`, `theme`, `chatId`, `mobile`, `WEBUI_NAME`
+- `src/lib/apis/` — typed REST clients; `streaming/` for SSE/WebSocket
+- `src/lib/components/` — domain trees: `chat/`, `layout/`, `common/`, `admin/`, `workspace/`, etc.
+- `src/lib/i18n/` — i18next; locales in `locales/`; run `npm run i18n:parse` for new keys

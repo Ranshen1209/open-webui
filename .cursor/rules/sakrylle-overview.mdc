@@ -1,0 +1,14 @@
+---
+description: Sakrylle Web project overview and branding
+alwaysApply: true
+---
+
+# Sakrylle Web
+
+Self-hosted AI platform (Open WebUI fork) with a **SvelteKit frontend** (`src/`) and **FastAPI backend** (`backend/open_webui/`). The frontend builds as a static SPA served by the backend, which provides REST API, WebSocket real-time communication, and LLM runner integration (Ollama, OpenAI-compatible APIs), vector databases, and auth providers.
+
+## Branch & Theme
+
+- Main branch: `main`
+- Theme branch: `theme/sakrylle` — rebrands the app as **Sakrylle Web** (`WEBUI_NAME` defaults in `env.py`)
+- GitHub repo: `Ranshen1209/sakrylle-web`
