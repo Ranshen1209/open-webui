@@ -582,7 +582,7 @@
 	}
 	:global(.dark .office-preview) {
 		color: #e5e7eb;
-		background: #1a1a2e;
+		background: var(--color-gray-950);
 	}
 	:global(.office-preview table) {
 		border-collapse: collapse;
