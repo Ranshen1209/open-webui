@@ -114,7 +114,7 @@
 						class="flex items-center w-full gap-2 px-1.5 py-1 text-xs rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition group"
 						on:click={() => previewPort(port.port)}
 					>
-						<span class="font-mono text-blue-500 dark:text-blue-400 shrink-0">
+						<span class="font-mono text-primary-500 dark:text-primary-400 shrink-0">
 							:{port.port}
 						</span>
 						<span class="text-gray-500 dark:text-gray-400 truncate flex-1 text-left">

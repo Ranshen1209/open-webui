@@ -240,7 +240,7 @@
 				</div>
 			{/if}
 			{#if entry.type === 'directory'}
-				<Folder className="size-4 shrink-0 text-blue-400 dark:text-blue-300" />
+				<Folder className="size-4 shrink-0 text-primary-400 dark:text-primary-300" />
 			{:else}
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

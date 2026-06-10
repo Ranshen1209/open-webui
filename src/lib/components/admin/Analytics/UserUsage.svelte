@@ -143,7 +143,7 @@
 						<td class="px-3 py-1.5 text-right font-medium text-gray-900 dark:text-white">
 							{user.count.toLocaleString()}
 						</td>
-						<td class="px-3 py-1.5 text-right font-medium text-blue-500">
+						<td class="px-3 py-1.5 text-right font-medium text-primary-500">
 							{((user.count / totalMessages) * 100).toFixed(1)}%
 						</td>
 					</tr>
