@@ -38,3 +38,12 @@ docker compose up -d
 docker compose up -d --build
 make install  # same as docker compose up -d
 ```
+
+## Local dev & builds (developer machine)
+
+Dev iteration runs locally — don't wait on CI/server.
+
+- **Frontend:** `npm run dev` (HMR at :5173) for nearly all theme/branding/UI work. Onboarding/auth pages only fully render with a backend; `:5173` alone shows the "backend required" screen for API-dependent pages.
+- **Backend (native, via `uv`):** `uv venv --python 3.12 .venv`; `uv pip install -r backend/requirements.txt` (heavy: torch/chromadb/onnxruntime — one-time, cached in `~/.cache/uv`). Run from `backend/`: `../.venv/bin/uvicorn open_webui.main:app --host 127.0.0.1 --port 8080 [--reload]`. Set `RAG_EMBEDDING_ENGINE=openai` to skip the embedding-model download at boot; `ENABLE_OLLAMA_API=False` when no Ollama.
+- **Local Docker image:** runtime is Colima (`colima start --cpu 6 --memory 12 --disk 80`; buildx linked at `~/.docker/cli-plugins/`). In-build registry network here is flaky (npm/pip `ECONNRESET`) — pre-pull base images and retry, or build the frontend on the host and `COPY` it in.
+- **Deploy/release image: CI, not local.** `.github/workflows/build-sakrylle-web.yml` builds **amd64** on push to `theme/sakrylle` → `ghcr.io/ranshen1209/sakrylle-web`; the server (`deploy/docker-compose.sakrylle-web.yml`) only `pull`s. This Mac is arm64 — local builds are arm64 (local testing only); producing amd64 locally needs QEMU (slow).

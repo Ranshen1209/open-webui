@@ -3,12 +3,14 @@ title: Sakrylle Web Implementation Status
 status: local
 scope: product-local
 canonical_source: ../../sub2api/sakrylle-docs/10-platform-identity/current-state.md
-last_verified: 2026-06-06
+last_verified: 2026-06-10
 ---
 
 # Sakrylle Web Implementation Status
 
 Current documentation status: **local implementation has been completed and pushed on `theme/sakrylle` at `be4448136`; automated local verification passed before commit; Sakrylle SSO still requires IdP client registration, deployment secrets, and staging smoke tests.**
+
+A follow-up session on 2026-06-10 advanced Sakrylle branding/UI substantially (Monet Purple theme, favicon, onboarding/auth re-skin, residual "Open WebUI" cleanup) — see [Branding & UI status (2026-06-10)](#branding--ui-status-2026-06-10). OIDC code readiness is unchanged: ready in code, not yet deployed.
 
 Latest repository progress:
 
@@ -25,7 +27,7 @@ Canonical platform status lives in [Sakrylle OIDC current state](../../sub2api/s
 - [x] Product-specific OAuth/OIDC callback is documented: `/oauth/oidc/login/callback`.
 - [x] Token storage behavior is documented: encrypted server-side `oauth_session` rows plus local browser auth/session cookies.
 - [x] SSO-only deployment settings are represented in `deploy/env.example`.
-- [x] Sakrylle Web manifest/static brand assets are present in tracked static paths and documented in `static/brand/README.md`.
+- [x] Sakrylle Web manifest/static brand assets are present in tracked static paths and documented in `static/brand/README.md`; favicon icon set refreshed to the cherry-blossom mark on 2026-06-10.
 - [ ] Sakrylle API IdP has an approved `sakrylle-web` confidential client registration for the deployment callback URI.
 - [ ] Deployment `.env` has production secrets and URLs installed outside the repository.
 - [ ] Login, refresh/access-token use, revoke/logout, and profile mapping smoke tests have been run in staging or production.
@@ -46,6 +48,23 @@ Canonical platform status lives in [Sakrylle OIDC current state](../../sub2api/s
 - Verify OpenAI-compatible calls to `https://api.sakrylle.com/v1` use the logged-in user's OAuth access token when `OPENAI_API_CONFIGS={"0":{"auth_type":"system_oauth"}}` is configured.
 - Verify `/userinfo` / profile mapping and `/api/v1/auths/signout` IdP logout behavior.
 - Verify `/manifest.json`, `/static/favicon.svg`, `/static/favicon.png`, `/static/splash.png`, and `/static/logo.png` show Sakrylle branding.
+
+## Branding & UI status (2026-06-10)
+
+Sakrylle branding/UI was advanced substantially in a follow-up session on `theme/sakrylle`. Design records: `docs/superpowers/specs/2026-06-10-monet-purple-theme-design.md` and `docs/superpowers/specs/2026-06-10-branding-finishing-design.md` (implementation plans under `docs/superpowers/plans/`). The brand-system source of truth remains the center docs (`../../sub2api/sakrylle-docs/40-brand-system/`); this file only records local status, not palette/design specs.
+
+**Committed:**
+
+- **Monet Purple theme** — `@theme` `primary-*` (Monet Purple) + `accent-*` (sakura) scales in `src/tailwind.css`; brand/interactive `blue-*` migrated to `primary-*`; neutral grays retinted warm-purple; sakura accent on the OIDC SSO CTA + links; dark first-paint aligned to `@theme` oklch (commits `92e6475dd`..`cdb107449`).
+- **Branding finishing** — `ENABLE_VERSION_UPDATE_CHECK=False` added to `deploy/env.example`; `SyncStatsModal`/`ManifestModal` "Open WebUI" references rewritten to dynamic `{{name}}` / neutral wording; the upstream Open WebUI enterprise/sponsorship promo removed from the admin user list; i18n keys synced (commits `d48d7be79`..`a1d24aa82`).
+
+**Also committed (2026-06-10):**
+
+- **Favicon set** replaced with the Sakrylle cherry-blossom mark across all three serving paths — `static/static/` (dev `/static/`), `backend/open_webui/static/` (prod `/static/`, `STATIC_DIR`), and `static/brand/` (canonical source). `favicon.svg` now embeds the new PNG (browsers prefer SVG over the PNGs).
+- **Onboarding** (`src/lib/components/OnBoarding.svelte`) and **auth** (`src/routes/auth/+page.svelte`) re-skinned: theme-aware sakura background (`/assets/images/sakura-{dark,light}.png`), Sakrylle taglines on onboarding, an adaptive light/dark scrim on auth for form legibility. `SlideShow.svelte` made single-image-safe.
+- **Error page** (`src/routes/error/+page.svelte`): removed the upstream readme/Discord help line.
+
+Path note: `/static/` maps to `static/static/` under the dev server and to `STATIC_DIR = backend/open_webui/static` under the backend (see `CLAUDE.md` → Local Development & Builds). Still upstream (gated, hidden at deploy or by `WEBUI_NAME`): community-sharing strings and the `About.svelte` attribution block.
 
 ## Remaining blockers
 

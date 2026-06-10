@@ -12,3 +12,4 @@ Self-hosted AI platform (Open WebUI fork) with a **SvelteKit frontend** (`src/`)
 - Main branch: `main`
 - Theme branch: `theme/sakrylle` — rebrands the app as **Sakrylle Web** (`WEBUI_NAME` defaults in `env.py`)
 - GitHub repo: `Ranshen1209/sakrylle-web`
+- Branding: Monet Purple theme (`primary-*`/`accent-*` tokens in `src/tailwind.css`), cherry-blossom favicon, sakura-skinned onboarding/auth. Product-local status: `oidc-docs/implementation-status.md`.
