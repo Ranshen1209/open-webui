@@ -15,6 +15,32 @@
 	--color-gray-850: oklch(0.27 0 0);
 	--color-gray-900: oklch(0.2 0 0);
 	--color-gray-950: oklch(0.16 0 0);
+
+	/* Sakrylle Monet Purple — primary brand/interactive color */
+	--color-primary-50: #f8f6fc;
+	--color-primary-100: #f0ecf8;
+	--color-primary-200: #e2daf2;
+	--color-primary-300: #cfc2e8;
+	--color-primary-400: #b5a3d9;
+	--color-primary-500: #9181bd;
+	--color-primary-600: #7b6aab;
+	--color-primary-700: #6b5b95;
+	--color-primary-800: #584b7a;
+	--color-primary-900: #4a3f66;
+	--color-primary-950: #2d2640;
+
+	/* Sakrylle Sakura — accent color (CTA / highlights only) */
+	--color-accent-50: #fdeef4;
+	--color-accent-100: #fbd9e7;
+	--color-accent-200: #f7b3cf;
+	--color-accent-300: #f28cb6;
+	--color-accent-400: #ef7aa9;
+	--color-accent-500: #ec6a9c;
+	--color-accent-600: #d94e85;
+	--color-accent-700: #b83d6e;
+	--color-accent-800: #93324f;
+	--color-accent-900: #6e2a3d;
+	--color-accent-950: #421826;
 }
 
 /*
