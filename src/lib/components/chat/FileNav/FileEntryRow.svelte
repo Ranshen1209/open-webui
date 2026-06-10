@@ -135,9 +135,9 @@
 <li class="group">
 	<div
 		class="w-full flex items-center transition
-			{selected ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}
+			{selected ? 'bg-primary-50 dark:bg-primary-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}
 			{dragOverFolder
-			? 'bg-blue-50 dark:bg-blue-900/30 ring-1 ring-blue-400 dark:ring-blue-500 ring-inset'
+			? 'bg-primary-50 dark:bg-primary-900/30 ring-1 ring-primary-400 dark:ring-primary-500 ring-inset'
 			: ''}"
 		role={entry.type === 'directory' ? 'button' : undefined}
 		on:dragover={(e) => {
@@ -220,7 +220,7 @@
 				<div
 					class="size-3.5 shrink-0 rounded border transition-colors flex items-center justify-center
 						{selected
-						? 'bg-blue-500 dark:bg-blue-600 border-blue-500 dark:border-blue-600 text-white'
+						? 'bg-primary-500 dark:bg-primary-600 border-primary-500 dark:border-primary-600 text-white'
 						: 'border-gray-300 dark:border-gray-600'}"
 				>
 					{#if selected}
