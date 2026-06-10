@@ -31,6 +31,12 @@
 
 	let loaded = false;
 
+	// Sakrylle auth background — theme-aware (dark / light)
+	const authBgImage =
+		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.png`
+			: `${WEBUI_BASE_URL}/assets/images/sakura-light.png`;
+
 	let mode = $config?.features.enable_ldap ? 'ldap' : 'signin';
 
 	let form = null;
@@ -230,7 +236,13 @@
 />
 
 <div class="w-full h-screen max-h-[100dvh] text-white relative" id="auth-page">
-	<div class="w-full h-full absolute top-0 left-0 bg-white dark:bg-black"></div>
+	<div
+		class="w-full h-full absolute top-0 left-0 bg-cover bg-center"
+		style="background-image: url('{authBgImage}')"
+	></div>
+	<div
+		class="w-full h-full absolute top-0 left-0 bg-white/70 dark:bg-black/60 backdrop-blur-sm"
+	></div>
 
 	<div class="w-full absolute top-0 left-0 right-0 h-8 drag-region" />
 

@@ -8,6 +8,12 @@
 	import SlideShow from './common/SlideShow.svelte';
 	import ArrowRightCircle from './icons/ArrowRightCircle.svelte';
 
+	// Sakrylle onboarding background — theme-aware (dark / light)
+	const bgImage =
+		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.png`
+			: `${WEBUI_BASE_URL}/assets/images/sakura-light.png`;
+
 	export let show = true;
 	export let getStartedHandler = () => {};
 
@@ -45,7 +51,6 @@
 				<div class=" self-center">
 					<img
 						id="logo"
-						crossorigin="anonymous"
 						src="{WEBUI_BASE_URL}/static/favicon.png"
 						class=" w-6 rounded-full"
 						alt="logo"
@@ -54,7 +59,7 @@
 			</div>
 		</div>
 
-		<SlideShow duration={5000} />
+		<SlideShow duration={5000} imageUrls={[bgImage]} />
 
 		<div
 			class="w-full h-full absolute top-0 left-0 bg-linear-to-t from-20% from-black to-transparent"
@@ -64,24 +69,14 @@
 
 		<div class="relative bg-transparent w-full h-screen max-h-[100dvh] flex z-10">
 			<div class="flex flex-col justify-end w-full items-center pb-10 text-center">
-				<div class="text-5xl lg:text-7xl font-secondary">
+				<div class="text-2xl lg:text-4xl font-secondary leading-relaxed max-w-4xl px-6">
 					<Marquee
-						duration={5000}
+						duration={6000}
 						words={[
-							$i18n.t('Explore the cosmos'),
-							$i18n.t('Unlock mysteries'),
-							$i18n.t('Chart new frontiers'),
-							$i18n.t('Dive into knowledge'),
-							$i18n.t('Discover wonders'),
-							$i18n.t('Ignite curiosity'),
-							$i18n.t('Forge new paths'),
-							$i18n.t('Unravel secrets'),
-							$i18n.t('Pioneer insights'),
-							$i18n.t('Embark on adventures')
+							'在樱花轻落的时光里，与你的每一次对话都像春风写下的情书',
+							'让灵感悄然绽放，让思绪温柔相遇'
 						]}
 					/>
-
-					<div class="mt-0.5">{$i18n.t(`wherever you are`)}</div>
 				</div>
 
 				<div class="flex justify-center mt-8">
