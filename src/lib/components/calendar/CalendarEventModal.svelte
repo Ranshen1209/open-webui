@@ -201,7 +201,7 @@
 						<input type="time" class="bg-transparent outline-hidden" bind:value={endTime} />
 					{/if}
 					<label class="flex items-center gap-1.5 cursor-pointer text-xs text-gray-400 ml-auto">
-						<input type="checkbox" class="accent-blue-500" bind:checked={allDay} />
+						<input type="checkbox" class="accent-primary-500" bind:checked={allDay} />
 						{$i18n.t('All day')}
 					</label>
 				</div>

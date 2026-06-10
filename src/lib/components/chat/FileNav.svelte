@@ -1331,7 +1331,7 @@
 							<input
 								bind:this={newFolderInput}
 								bind:value={newFolderName}
-								class="flex-1 text-xs bg-transparent border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 outline-none focus:border-blue-400 dark:focus:border-blue-500"
+								class="flex-1 text-xs bg-transparent border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 outline-none focus:border-primary-400 dark:focus:border-primary-500"
 								placeholder={$i18n.t('Folder name')}
 								on:keydown={(e) => {
 									if (e.key === 'Enter') submitNewFolder();
@@ -1350,7 +1350,7 @@
 							<input
 								bind:this={newFileInput}
 								bind:value={newFileName}
-								class="flex-1 text-xs bg-transparent border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 outline-none focus:border-blue-400 dark:focus:border-blue-500"
+								class="flex-1 text-xs bg-transparent border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5 outline-none focus:border-primary-400 dark:focus:border-primary-500"
 								placeholder={$i18n.t('File name')}
 								on:keydown={(e) => {
 									if (e.key === 'Enter') submitNewFile();
