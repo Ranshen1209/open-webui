@@ -158,7 +158,7 @@
 				<button
 					class="w-6 h-6 flex items-center justify-center rounded-full transition
 						{day.getMonth() !== miniMonth ? 'text-gray-300 dark:text-gray-600' : ''}
-						{isToday(day) ? 'bg-blue-500 text-white' : ''}
+						{isToday(day) ? 'bg-primary-500 text-white' : ''}
 						{day.toDateString() === currentDate.toDateString() && !isToday(day)
 						? 'bg-gray-200 dark:bg-gray-700'
 						: ''}
@@ -205,7 +205,7 @@
 				>
 					<span
 						class="shrink-0 size-2.5 rounded-full transition-opacity"
-						style="background-color: {cal.color || '#3b82f6'}; opacity: {visibleCalendarIds.has(
+						style="background-color: {cal.color || 'var(--color-primary-500)'}; opacity: {visibleCalendarIds.has(
 							cal.id
 						)
 							? '1'

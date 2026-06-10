@@ -18,7 +18,7 @@
 	>
 		<span
 			class="shrink-0 size-[7px] rounded-full mt-[5px]"
-			style="background-color: {event.color || calendarColor || '#3b82f6'};"
+			style="background-color: {event.color || calendarColor || 'var(--color-primary-500)'};"
 		></span>
 		<span class="truncate">
 			{#if !event.all_day}<span class="text-gray-500 dark:text-gray-400"

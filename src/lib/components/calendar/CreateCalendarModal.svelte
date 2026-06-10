@@ -7,6 +7,7 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 
 	import { createCalendar } from '$lib/apis/calendar';
+	import { PRIMARY_500 } from '$lib/theme/colors';
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -14,11 +15,11 @@
 	export let show = false;
 
 	let name = '';
-	let color = '#3b82f6';
+	let color = PRIMARY_500;
 	let loading = false;
 
 	const PRESET_COLORS = [
-		'#3b82f6', // blue
+		PRIMARY_500, // primary
 		'#ef4444', // red
 		'#22c55e', // green
 		'#f59e0b', // amber
@@ -30,7 +31,7 @@
 
 	function reset() {
 		name = '';
-		color = '#3b82f6';
+		color = PRIMARY_500;
 		loading = false;
 	}
 

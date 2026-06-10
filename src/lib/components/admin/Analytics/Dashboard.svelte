@@ -17,6 +17,7 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
 	import { formatNumber } from '$lib/utils';
+	import { PRIMARY_500 } from '$lib/theme/colors';
 	import { goto } from '$app/navigation';
 
 	const i18n = getContext('i18n');
@@ -262,7 +263,7 @@
 		{@const allModels = [...new Set(dailyStats.flatMap((d) => Object.keys(d.models || {})))]}
 		{@const topModels = allModels.slice(0, 8)}
 		{@const chartColors = [
-			'#3b82f6',
+			PRIMARY_500,
 			'#10b981',
 			'#f59e0b',
 			'#ef4444',
