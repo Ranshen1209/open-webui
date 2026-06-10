@@ -5,6 +5,7 @@
 
 	import Modal from '../../common/Modal.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
+	import { WEBUI_NAME } from '$lib/stores';
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -44,7 +45,8 @@
 
 						<div class="my-2">
 							{$i18n.t(
-								'Your entire contribution will go directly to the plugin developer; Open WebUI does not take any percentage. However, the chosen funding platform might have its own fees.'
+								'Your entire contribution will go directly to the plugin developer; {{name}} does not take any percentage. However, the chosen funding platform might have its own fees.',
+								{ name: $WEBUI_NAME }
 							)}
 						</div>
 
