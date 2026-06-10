@@ -31,7 +31,6 @@
 	import ChevronDown from '$lib/components/icons/ChevronDown.svelte';
 	import About from '$lib/components/chat/Settings/About.svelte';
 	import Banner from '$lib/components/common/Banner.svelte';
-	import Markdown from '$lib/components/chat/Messages/Markdown.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import ProfilePreview from '$lib/components/channel/Messages/Message/ProfilePreview.svelte';
 	import UserPreviewModal from '$lib/components/admin/UserPreviewModal.svelte';
