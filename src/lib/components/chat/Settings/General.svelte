@@ -142,10 +142,10 @@
 		}
 
 		if (themeToApply === 'dark' && !_theme.includes('oled')) {
-			document.documentElement.style.setProperty('--color-gray-800', '#2a2533');
-			document.documentElement.style.setProperty('--color-gray-850', '#221d2b');
-			document.documentElement.style.setProperty('--color-gray-900', '#1a1622');
-			document.documentElement.style.setProperty('--color-gray-950', '#120f18');
+			document.documentElement.style.setProperty('--color-gray-800', 'oklch(0.32 0.02 300)');
+			document.documentElement.style.setProperty('--color-gray-850', 'oklch(0.27 0.02 300)');
+			document.documentElement.style.setProperty('--color-gray-900', 'oklch(0.2 0.02 300)');
+			document.documentElement.style.setProperty('--color-gray-950', 'oklch(0.16 0.018 300)');
 		}
 
 		themes
