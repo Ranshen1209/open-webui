@@ -24,7 +24,6 @@ import certifi
 import requests
 import urllib3.connection
 import urllib3.connectionpool
-import validators
 from requests.adapters import HTTPAdapter
 from fastapi.concurrency import run_in_threadpool
 from langchain_community.document_loaders import PlaywrightURLLoader, WebBaseLoader
@@ -41,7 +40,6 @@ from open_webui.config import (
     PLAYWRIGHT_WS_URL,
     TAVILY_API_KEY,
     TAVILY_EXTRACT_DEPTH,
-    WEB_FETCH_FILTER_LIST,
     WEB_LOADER_ENGINE,
     WEB_LOADER_TIMEOUT,
 )
@@ -50,7 +48,6 @@ from open_webui.env import AIOHTTP_CLIENT_ALLOW_REDIRECTS, AIOHTTP_CLIENT_SESSIO
 from open_webui.retrieval.loaders.external_web import ExternalWebLoader
 from open_webui.retrieval.loaders.tavily import TavilyLoader
 from open_webui.retrieval.web.firecrawl import scrape_firecrawl_url
-from open_webui.utils.misc import is_string_allowed
 
 log = logging.getLogger(__name__)
 
