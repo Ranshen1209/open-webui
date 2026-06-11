@@ -291,7 +291,7 @@ ENABLE_DIRECT_CONNECTIONS = ConfigVar(
 ENABLE_OLLAMA_API = ConfigVar(
     'ENABLE_OLLAMA_API',
     'ollama.enable',
-    os.getenv('ENABLE_OLLAMA_API', 'True').lower() == 'true',
+    os.getenv('ENABLE_OLLAMA_API', 'False').lower() == 'true',
 )
 
 OLLAMA_API_BASE_URL = os.getenv('OLLAMA_API_BASE_URL', 'http://localhost:11434/api')
@@ -482,7 +482,7 @@ except Exception:
 ENABLE_CODE_EXECUTION = ConfigVar(
     'ENABLE_CODE_EXECUTION',
     'code_execution.enable',
-    os.getenv('ENABLE_CODE_EXECUTION', 'True').lower() == 'true',
+    os.getenv('ENABLE_CODE_EXECUTION', 'False').lower() == 'true',
 )
 
 CODE_EXECUTION_ENGINE = ConfigVar(
@@ -525,7 +525,7 @@ CODE_EXECUTION_JUPYTER_TIMEOUT = ConfigVar(
 ENABLE_CODE_INTERPRETER = ConfigVar(
     'ENABLE_CODE_INTERPRETER',
     'code_interpreter.enable',
-    os.getenv('ENABLE_CODE_INTERPRETER', 'True').lower() == 'true',
+    os.getenv('ENABLE_CODE_INTERPRETER', 'False').lower() == 'true',
 )
 
 ENABLE_MEMORIES = ConfigVar(
@@ -632,7 +632,7 @@ CODE_INTERPRETER_PYODIDE_PROMPT = """
 # Vector Database
 ####################################
 
-VECTOR_DB = os.getenv('VECTOR_DB', 'chroma')
+VECTOR_DB = os.getenv('VECTOR_DB', '')
 
 # Chroma
 CHROMA_DATA_PATH = f'{DATA_DIR}/vector_db'
@@ -1218,7 +1218,7 @@ PADDLEOCR_VL_TOKEN = ConfigVar(
 BYPASS_EMBEDDING_AND_RETRIEVAL = ConfigVar(
     'BYPASS_EMBEDDING_AND_RETRIEVAL',
     'rag.bypass_embedding_and_retrieval',
-    os.getenv('BYPASS_EMBEDDING_AND_RETRIEVAL', 'False').lower() == 'true',
+    os.getenv('BYPASS_EMBEDDING_AND_RETRIEVAL', 'True').lower() == 'true',
 )
 
 
@@ -1291,7 +1291,7 @@ RAG_ALLOWED_FILE_EXTENSIONS = ConfigVar(
 RAG_EMBEDDING_ENGINE = ConfigVar(
     'RAG_EMBEDDING_ENGINE',
     'rag.embedding_engine',
-    os.getenv('RAG_EMBEDDING_ENGINE', ''),
+    os.getenv('RAG_EMBEDDING_ENGINE', 'openai'),
 )
 
 PDF_EXTRACT_IMAGES = ConfigVar(

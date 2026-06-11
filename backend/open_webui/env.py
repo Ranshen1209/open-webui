@@ -976,7 +976,7 @@ PIP_PACKAGE_INDEX_OPTIONS = os.getenv('PIP_PACKAGE_INDEX_OPTIONS', '').split()
 # OFFLINE_MODE
 ####################################
 
-ENABLE_VERSION_UPDATE_CHECK = os.getenv('ENABLE_VERSION_UPDATE_CHECK', 'true').lower() == 'true'
+ENABLE_VERSION_UPDATE_CHECK = os.getenv('ENABLE_VERSION_UPDATE_CHECK', 'false').lower() == 'true'
 OFFLINE_MODE = os.getenv('OFFLINE_MODE', 'false').lower() == 'true'
 
 if OFFLINE_MODE:
@@ -1065,3 +1065,20 @@ OTEL_METRICS_OTLP_SPAN_EXPORTER = os.getenv(
 OTEL_LOGS_OTLP_SPAN_EXPORTER = os.getenv(
     'OTEL_LOGS_OTLP_SPAN_EXPORTER', OTEL_OTLP_SPAN_EXPORTER
 ).lower()  # grpc or http
+
+
+####################################
+# Sakrylle slim-profile flags
+####################################
+
+# When False (default), the retrieval router is not imported or registered,
+# avoiding the heavy sentence-transformers / chromadb / playwright chain.
+SAKRYLLE_ENABLE_RETRIEVAL_ROUTER = (
+    os.getenv('SAKRYLLE_ENABLE_RETRIEVAL_ROUTER', 'False').lower() == 'true'
+)
+
+# When False (default), the /ollama passthrough router is not registered.
+# Independent from upstream ENABLE_OLLAMA_API (which only controls UI behavior).
+SAKRYLLE_ENABLE_OLLAMA_ROUTER = (
+    os.getenv('SAKRYLLE_ENABLE_OLLAMA_ROUTER', 'False').lower() == 'true'
+)
