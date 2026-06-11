@@ -249,6 +249,7 @@
 	$: if (
 		selectedTag !== undefined ||
 		selectedConnectionType !== undefined ||
+		selectedGroupId !== undefined ||
 		searchValue !== undefined
 	) {
 		resetView();
