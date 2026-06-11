@@ -84,6 +84,13 @@ class Vector:
                 from open_webui.retrieval.vector.dbs.valkey import ValkeyClient
 
                 return ValkeyClient()
+            case '' | 'none':
+                # Sakrylle slim profile: no vector store configured. Returns a
+                # no-op backend so always-on routers (files, builtin tools) stay
+                # import- and call-safe without chromadb / torch / sentence-transformers.
+                from open_webui.retrieval.vector.dbs.noop import NoOpVectorClient
+
+                return NoOpVectorClient()
             case _:
                 raise ValueError(f'Unsupported vector type: {vector_type}')
 
