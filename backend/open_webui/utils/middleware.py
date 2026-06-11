@@ -45,7 +45,10 @@ from open_webui.models.functions import Functions
 from open_webui.models.models import Models
 from open_webui.models.oauth_sessions import OAuthSessions
 from open_webui.models.users import UserModel, Users
-from open_webui.retrieval.utils import get_sources_from_items
+# get_sources_from_items is imported lazily inside chat_completion_files_handler:
+# utils/middleware.py is the always-on chat pipeline, and retrieval/utils.py pulls
+# the heavy RAG chain (langchain_classic, huggingface_hub, sentence-transformers)
+# at import. RAG context injection only runs when a chat has attached sources.
 from open_webui.routers.images import (
     CreateImageForm,
     EditImageForm,
@@ -57,10 +60,9 @@ from open_webui.routers.pipelines import (
     process_pipeline_inlet_filter,
     process_pipeline_outlet_filter,
 )
-from open_webui.routers.retrieval import (
-    SearchForm,
-    process_web_search,
-)
+# SearchForm / process_web_search are imported lazily inside
+# chat_web_search_handler — see the import note above (routers.retrieval pulls
+# the heavy RAG chain at module load).
 from open_webui.routers.tasks import (
     generate_chat_tags,
     generate_follow_ups,
@@ -1492,6 +1494,9 @@ async def chat_memory_handler(request: Request, form_data: dict, extra_params: d
 
 
 async def chat_web_search_handler(request: Request, form_data: dict, extra_params: dict, user):
+    # Lazy import: keeps the heavy RAG chain out of module load (see import note above).
+    from open_webui.routers.retrieval import SearchForm, process_web_search
+
     event_emitter = extra_params['__event_emitter__']
     await event_emitter(
         {
@@ -1957,6 +1962,9 @@ async def chat_image_generation_handler(request: Request, form_data: dict, extra
 async def chat_completion_files_handler(
     request: Request, body: dict, extra_params: dict, user: UserModel
 ) -> tuple[dict, dict[str, list]]:
+    # Lazy import: keeps the heavy RAG chain out of module load (see import note above).
+    from open_webui.retrieval.utils import get_sources_from_items
+
     __event_emitter__ = extra_params['__event_emitter__']
     sources = []
 

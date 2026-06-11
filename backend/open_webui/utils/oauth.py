@@ -81,7 +81,7 @@ from open_webui.models.auths import Auths
 from open_webui.models.groups import GroupForm, GroupModel, Groups, GroupUpdateForm
 from open_webui.models.oauth_sessions import OAuthSessions
 from open_webui.models.users import Users
-from open_webui.retrieval.web.utils import validate_url
+from open_webui.utils.url import validate_url
 from open_webui.utils.auth import create_token, get_password_hash
 from open_webui.utils.groups import apply_default_group_assignment
 from open_webui.utils.misc import parse_duration

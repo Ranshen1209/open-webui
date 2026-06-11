@@ -20,7 +20,7 @@ from open_webui.env import (
 )
 from open_webui.models.chats import Chats
 from open_webui.models.files import Files
-from open_webui.retrieval.web.utils import validate_url
+from open_webui.utils.url import validate_url
 from open_webui.routers.files import upload_file_handler
 from open_webui.utils.access_control.files import has_access_to_file
 from open_webui.routers.images import (

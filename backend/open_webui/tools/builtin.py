@@ -23,7 +23,9 @@ from open_webui.models.memories import Memories
 from open_webui.models.messages import Message, Messages
 from open_webui.models.notes import Notes
 from open_webui.models.users import UserModel
-from open_webui.retrieval.utils import get_content_from_url
+# get_content_from_url is imported lazily inside fetch_url; retrieval/utils.py
+# pulls the heavy RAG chain (langchain_classic / sentence-transformers) at import,
+# and tools/builtin.py is reachable from the always-on chat pipeline.
 from open_webui.retrieval.vector.async_client import ASYNC_VECTOR_DB_CLIENT
 from open_webui.routers.images import (
     CreateImageForm,
@@ -41,7 +43,8 @@ from open_webui.routers.memories import (
 from open_webui.routers.memories import (
     add_memory as _add_memory,
 )
-from open_webui.routers.retrieval import search_web as _search_web
+# search_web is imported lazily inside the search_web tool (see note above) —
+# routers.retrieval pulls the heavy RAG chain at module load.
 from open_webui.utils.sanitize import sanitize_code
 
 log = logging.getLogger(__name__)
@@ -224,6 +227,9 @@ async def search_web(
     if __request__ is None:
         return json.dumps({'error': 'Request context not available'})
 
+    # Lazy import: keeps the heavy RAG chain out of module load (see import note above).
+    from open_webui.routers.retrieval import search_web as _search_web
+
     try:
         engine = __request__.app.state.config.WEB_SEARCH_ENGINE
         user = UserModel(**__user__) if __user__ else None
@@ -259,6 +265,9 @@ async def fetch_url(
     """
     if __request__ is None:
         return json.dumps({'error': 'Request context not available'})
+
+    # Lazy import: keeps the heavy RAG chain out of module load (see import note above).
+    from open_webui.retrieval.utils import get_content_from_url
 
     try:
         content, _ = await asyncio.to_thread(get_content_from_url, __request__, url)

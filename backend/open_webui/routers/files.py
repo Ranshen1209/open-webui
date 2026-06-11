@@ -39,7 +39,11 @@ from open_webui.models.knowledge import Knowledges
 from open_webui.models.users import Users
 from open_webui.retrieval.vector.async_client import ASYNC_VECTOR_DB_CLIENT
 from open_webui.routers.audio import transcribe
-from open_webui.routers.retrieval import ProcessFileForm, process_file
+# NOTE: `from open_webui.routers.retrieval import ProcessFileForm, process_file`
+# is imported lazily inside the functions that use it. routers/files.py is an
+# always-on router; importing routers.retrieval at module load would pull the
+# heavy RAG chain (langchain text splitters, web loaders, sentence-transformers)
+# into every process, including the Sakrylle slim profile where retrieval is off.
 from open_webui.storage.provider import Storage
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.utils.misc import strict_match_mime_type
@@ -114,6 +118,9 @@ async def process_uploaded_file(
     user,
     db: Optional[AsyncSession] = None,
 ):
+    # Lazy import: keeps the heavy RAG chain out of module load (see top-of-file note).
+    from open_webui.routers.retrieval import ProcessFileForm, process_file
+
     async def _process_handler(db_session):
         try:
             content_type = file.content_type
@@ -596,6 +603,9 @@ async def update_file_data_content_by_id(
     user=Depends(get_verified_user),
     db: AsyncSession = Depends(get_async_session),
 ):
+    # Lazy import: keeps the heavy RAG chain out of module load (see top-of-file note).
+    from open_webui.routers.retrieval import ProcessFileForm, process_file
+
     file = await Files.get_file_by_id(id, db=db)
 
     if not file:

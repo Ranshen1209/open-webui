@@ -9,7 +9,7 @@ from open_webui.env import (
     AIOHTTP_CLIENT_TIMEOUT,
     VERSION,
 )
-from open_webui.retrieval.web.utils import validate_url
+from open_webui.utils.url import validate_url
 
 log = logging.getLogger(__name__)
 

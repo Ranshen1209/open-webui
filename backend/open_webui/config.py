@@ -531,7 +531,7 @@ ENABLE_CODE_INTERPRETER = ConfigVar(
 ENABLE_MEMORIES = ConfigVar(
     'ENABLE_MEMORIES',
     'memories.enable',
-    os.getenv('ENABLE_MEMORIES', 'True').lower() == 'true',
+    os.getenv('ENABLE_MEMORIES', 'False').lower() == 'true',
 )
 
 CODE_INTERPRETER_ENGINE = ConfigVar(
