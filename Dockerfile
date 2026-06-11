@@ -35,8 +35,11 @@ WORKDIR /app
 # to store git revision in build
 RUN apk add --no-cache git
 
+# Optional npm registry mirror for local builds (e.g. https://registry.npmmirror.com).
+# Empty by default so CI uses the official registry.
+ARG NPM_REGISTRY=""
 COPY package.json package-lock.json ./
-RUN npm ci --force
+RUN npm ci --force ${NPM_REGISTRY:+--registry=${NPM_REGISTRY}}
 
 COPY . .
 ENV APP_BUILD_HASH=${BUILD_HASH}
@@ -56,6 +59,12 @@ ARG USE_RERANKING_MODEL
 ARG USE_AUXILIARY_EMBEDDING_MODEL
 ARG UID
 ARG GID
+
+# Optional mirrors for local builds; empty by default so CI uses official sources.
+# APT_MIRROR e.g. https://mirrors.tuna.tsinghua.edu.cn ; PIP_INDEX_URL e.g.
+# https://pypi.tuna.tsinghua.edu.cn/simple
+ARG APT_MIRROR=""
+ARG PIP_INDEX_URL=""
 
 # Python settings
 ENV PYTHONUNBUFFERED=1
@@ -124,7 +133,10 @@ RUN echo -n 00000000-0000-0000-0000-000000000000 > $HOME/.cache/chroma/telemetry
 RUN chown -R $UID:$GID /app $HOME
 
 # Install common system dependencies
-RUN apt-get update && \
+RUN if [ -n "$APT_MIRROR" ]; then \
+    sed -i "s|http://deb.debian.org|${APT_MIRROR}|g; s|http://security.debian.org|${APT_MIRROR}|g" /etc/apt/sources.list.d/debian.sources 2>/dev/null || true; \
+    fi; \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
     git build-essential pandoc gcc netcat-openbsd curl jq \
     libmariadb-dev \
@@ -139,12 +151,12 @@ COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 ENV UV_LINK_MODE=copy
 
 RUN set -e; \
-    pip3 install --no-cache-dir uv; \
+    pip3 install --no-cache-dir ${PIP_INDEX_URL:+-i ${PIP_INDEX_URL}} uv; \
     if [ "$USE_CUDA" = "true" ]; then \
     # If you use CUDA the whisper and embedding model will be downloaded on first use
     # fix: pin torch<=2.9.1 - torch 2.10.0 aarch64 wheels cause SIGILL on ARM devices (RPi 4 Cortex-A72) #21349
     pip3 install 'torch<=2.9.1' torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
-    uv pip install --system -r requirements.txt --no-cache-dir; \
+    uv pip install --system -r requirements.txt --no-cache-dir ${PIP_INDEX_URL:+--index-url ${PIP_INDEX_URL}}; \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ['RAG_EMBEDDING_MODEL'], device='cpu')"; \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ.get('AUXILIARY_EMBEDDING_MODEL', 'TaylorAI/bge-micro-v2'), device='cpu')"; \
     python -c "import os; from faster_whisper import WhisperModel; WhisperModel(os.environ['WHISPER_MODEL'], device='cpu', compute_type='int8', download_root=os.environ['WHISPER_MODEL_DIR'])"; \
@@ -156,7 +168,7 @@ RUN set -e; \
     if [ "$USE_SLIM" != "true" ]; then \
     pip3 install 'torch<=2.9.1' torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --no-cache-dir; \
     fi; \
-    uv pip install --system -r requirements.txt --no-cache-dir; \
+    uv pip install --system -r requirements.txt --no-cache-dir ${PIP_INDEX_URL:+--index-url ${PIP_INDEX_URL}}; \
     if [ "$USE_SLIM" != "true" ]; then \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ['RAG_EMBEDDING_MODEL'], device='cpu')"; \
     python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ.get('AUXILIARY_EMBEDDING_MODEL', 'TaylorAI/bge-micro-v2'), device='cpu')"; \
