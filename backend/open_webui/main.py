@@ -2461,6 +2461,8 @@ async def get_app_config(request: Request):
                     'enable_calendar': app.state.config.ENABLE_CALENDAR,
                     'enable_automations': app.state.config.ENABLE_AUTOMATIONS,
                     'enable_notes': app.state.config.ENABLE_NOTES,
+                    'enable_retrieval': SAKRYLLE_ENABLE_RETRIEVAL_ROUTER,
+                    'enable_ollama_api': app.state.config.ENABLE_OLLAMA_API,
                     'enable_web_search': app.state.config.ENABLE_WEB_SEARCH,
                     'enable_code_execution': app.state.config.ENABLE_CODE_EXECUTION,
                     'enable_code_interpreter': app.state.config.ENABLE_CODE_INTERPRETER,
