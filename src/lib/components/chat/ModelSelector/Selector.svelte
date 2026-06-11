@@ -38,6 +38,15 @@
 
 	import ModelItem from './ModelItem.svelte';
 
+	import {
+		deriveGroups,
+		resolveSelectedGroupId,
+		formatGroupLabel,
+		getSavedGroupId,
+		saveGroupId,
+		DEFAULT_MODEL_GROUP_NAME
+	} from '$lib/utils/modelGroups';
+
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
 
@@ -131,6 +140,19 @@
 	let selectedTag = '';
 	let selectedConnectionType = '';
 
+	let selectedGroupId = undefined;
+	let modelGroups = [];
+
+	$: modelGroups = deriveGroups(items);
+	$: if (modelGroups.length && selectedGroupId === undefined) {
+		selectedGroupId = resolveSelectedGroupId(modelGroups, getSavedGroupId(), DEFAULT_MODEL_GROUP_NAME);
+	}
+
+	const matchesGroup = (item) =>
+		modelGroups.length === 0 ||
+		selectedGroupId === undefined ||
+		item.model?.group?.id === selectedGroupId;
+
 	let ollamaVersion = null;
 	let selectedModelIdx = 0;
 
@@ -197,6 +219,7 @@
 							return item.model?.direct;
 						}
 					})
+					.filter(matchesGroup)
 			: items
 					.filter((item) => {
 						if (selectedTag === '') {
@@ -217,6 +240,7 @@
 							return item.model?.direct;
 						}
 					})
+					.filter(matchesGroup)
 	).filter((item) => !(item.model?.info?.meta?.hidden ?? false));
 
 	$: if (
@@ -594,6 +618,25 @@
 					{/if}
 
 					<div class="px-2">
+						{#if modelGroups.length > 0}
+							<div class="flex items-center gap-2 px-2.5 pt-1 pb-1">
+								<span class="text-xs text-gray-500 dark:text-gray-400 shrink-0"
+									>{$i18n.t('Group')}</span
+								>
+								<select
+									id="model-group-select"
+									class="w-full text-sm bg-transparent outline-hidden rounded-lg py-1 cursor-pointer"
+									bind:value={selectedGroupId}
+									on:change={() => {
+										if (selectedGroupId != null) saveGroupId(selectedGroupId);
+									}}
+								>
+									{#each modelGroups as group (group.id)}
+										<option value={group.id}>{formatGroupLabel(group)}</option>
+									{/each}
+								</select>
+							</div>
+						{/if}
 						{#if tags && items.filter((item) => !(item.model?.info?.meta?.hidden ?? false)).length > 0}
 							<div
 								class=" flex w-full bg-white dark:bg-gray-850 overflow-x-auto scrollbar-none font-[450] mb-0.5"
