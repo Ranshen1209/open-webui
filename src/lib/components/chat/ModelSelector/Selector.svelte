@@ -144,10 +144,13 @@
 	let modelGroups = [];
 
 	$: modelGroups = deriveGroups(items);
-	$: if (modelGroups.length && selectedGroupId === undefined) {
+	$: if (!modelGroups.length) {
+		selectedGroupId = undefined;
+	} else if (selectedGroupId === undefined || !modelGroups.some((g) => g.id === selectedGroupId)) {
 		selectedGroupId = resolveSelectedGroupId(modelGroups, getSavedGroupId(), DEFAULT_MODEL_GROUP_NAME);
 	}
 
+	// Read inside the $: filteredItems reactive so Svelte tracks selectedGroupId/modelGroups as deps.
 	const matchesGroup = (item) =>
 		modelGroups.length === 0 ||
 		selectedGroupId === undefined ||
@@ -620,8 +623,8 @@
 					<div class="px-2">
 						{#if modelGroups.length > 0}
 							<div class="flex items-center gap-2 px-2.5 pt-1 pb-1">
-								<span class="text-xs text-gray-500 dark:text-gray-400 shrink-0"
-									>{$i18n.t('Group')}</span
+								<label for="model-group-select" class="text-xs text-gray-500 dark:text-gray-400 shrink-0"
+									>{$i18n.t('Group')}</label
 								>
 								<select
 									id="model-group-select"
