@@ -290,6 +290,7 @@
 					</div>
 				</div>
 
+				{#if ($config?.features?.enable_ollama_api ?? true)}
 				<div class=" my-2">
 					<div class="flex justify-between items-center text-sm mb-2">
 						<div class="  font-medium">{$i18n.t('Ollama API')}</div>
@@ -360,6 +361,7 @@
 						</div>
 					{/if}
 				</div>
+				{/if}
 
 				<div class="my-2">
 					<div class="flex justify-between items-center text-sm">

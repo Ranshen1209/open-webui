@@ -70,7 +70,7 @@
 	let searchDebounceTimeout;
 	let filteredSettings = [];
 
-	const allSettings = [
+	const baseSettings = [
 		{
 			id: 'general',
 			title: 'General',
@@ -141,6 +141,7 @@
 			id: 'documents',
 			title: 'Documents',
 			route: '/admin/settings/documents',
+			featureFlag: 'enable_retrieval',
 			keywords: [
 				'documents',
 				'files',
@@ -163,6 +164,7 @@
 			id: 'web',
 			title: 'Web Search',
 			route: '/admin/settings/web',
+			featureFlag: 'enable_web_search',
 			keywords: [
 				'web search',
 				'google',
@@ -184,6 +186,7 @@
 			id: 'code-execution',
 			title: 'Code Execution',
 			route: '/admin/settings/code-execution',
+			featureFlag: 'enable_code_interpreter',
 			keywords: ['code execution', 'python', 'sandbox', 'compiler', 'jupyter', 'interpreter']
 		},
 		{
@@ -245,6 +248,12 @@
 			keywords: ['database', 'export', 'import', 'backup', 'chats', 'users']
 		}
 	];
+
+	$: allSettings = baseSettings.filter(
+		(tab) => !tab.featureFlag || ($config?.features?.[tab.featureFlag] ?? true)
+	);
+
+	$: allSettings, setFilteredSettings();
 
 	const setFilteredSettings = () => {
 		filteredSettings = allSettings.filter((tab) => {
@@ -527,7 +536,7 @@
 			<Evaluations />
 		{:else if selectedTab === 'integrations'}
 			<Integrations />
-		{:else if selectedTab === 'documents'}
+		{:else if selectedTab === 'documents' && ($config?.features?.enable_retrieval ?? true)}
 			<Documents
 				on:save={async () => {
 					toast.success($i18n.t('Settings saved successfully!'));
@@ -536,7 +545,7 @@
 					await config.set(await getBackendConfig());
 				}}
 			/>
-		{:else if selectedTab === 'web'}
+		{:else if selectedTab === 'web' && ($config?.features?.enable_web_search ?? true)}
 			<WebSearch
 				saveHandler={async () => {
 					toast.success($i18n.t('Settings saved successfully!'));
@@ -545,7 +554,7 @@
 					await config.set(await getBackendConfig());
 				}}
 			/>
-		{:else if selectedTab === 'code-execution'}
+		{:else if selectedTab === 'code-execution' && ($config?.features?.enable_code_interpreter ?? true)}
 			<CodeExecution
 				saveHandler={async () => {
 					toast.success($i18n.t('Settings saved successfully!'));
