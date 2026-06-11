@@ -8,7 +8,8 @@
 		mobile,
 		models,
 		knowledge,
-		tools
+		tools,
+		config
 	} from '$lib/stores';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -25,7 +26,8 @@
 				goto('/');
 			} else if (
 				$page.url.pathname.includes('/knowledge') &&
-				!$user?.permissions?.workspace?.knowledge
+				(!$user?.permissions?.workspace?.knowledge ||
+					!($config?.features?.enable_retrieval ?? true))
 			) {
 				goto('/');
 			} else if (
@@ -95,7 +97,7 @@
 							>
 						{/if}
 
-						{#if $user?.role === 'admin' || $user?.permissions?.workspace?.knowledge}
+						{#if ($config?.features?.enable_retrieval ?? true) && ($user?.role === 'admin' || $user?.permissions?.workspace?.knowledge)}
 							<a
 								draggable="false"
 								aria-current={$page.url.pathname.includes('/workspace/knowledge') ? 'page' : null}
