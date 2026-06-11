@@ -45,6 +45,7 @@ from open_webui.utils.misc import (
     convert_logit_bias_input_to_json,
     stream_chunks_handler,
 )
+from open_webui.utils.model_groups import append_query_params, apply_display_name
 from open_webui.utils.payload import (
     apply_model_params_to_body_openai,
     apply_system_prompt_to_body,
@@ -123,7 +124,10 @@ async def get_models_request(
 ):
     if is_anthropic_url(url):
         return await get_anthropic_models(url, key, user=user)
-    return await send_get_request(request, f'{url}/models', key, user=user, config=config)
+    models_url = f'{url}/models'
+    if config and config.get('model_list_query'):
+        models_url = append_query_params(models_url, config.get('model_list_query'))
+    return await send_get_request(request, models_url, key, user=user, config=config)
 
 
 def openai_reasoning_model_handler(payload):
@@ -455,6 +459,8 @@ async def get_all_models_responses(request: Request, user: UserModel) -> list:
 
                 if provider:
                     model['provider'] = provider
+
+                apply_display_name(model)
 
     log.debug(f'get_all_models:responses() {responses}')
     return responses
