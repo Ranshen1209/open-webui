@@ -497,7 +497,6 @@ from open_webui.routers import (
     memories,
     models,
     notes,
-    ollama,
     openai,
     pipelines,
     prompts,
@@ -536,6 +535,10 @@ else:
 
     def get_rf(*_args, **_kwargs):
         return None
+if SAKRYLLE_ENABLE_OLLAMA_ROUTER:
+    from open_webui.routers import ollama
+else:
+    ollama = None
 from open_webui.socket.main import (
     MODELS,
     get_event_emitter,
@@ -1434,7 +1437,8 @@ app.add_middleware(
 app.mount('/ws', socket_app)
 
 
-app.include_router(ollama.router, prefix='/ollama', tags=['ollama'])
+if SAKRYLLE_ENABLE_OLLAMA_ROUTER:
+    app.include_router(ollama.router, prefix='/ollama', tags=['ollama'])
 app.include_router(openai.router, prefix='/openai', tags=['openai'])
 
 
