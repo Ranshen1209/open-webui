@@ -3,7 +3,7 @@ title: Sakrylle Web Implementation Status
 status: local
 scope: product-local
 canonical_source: ../../sub2api/sakrylle-docs/10-platform-identity/current-state.md
-last_verified: 2026-06-10
+last_verified: 2026-06-11
 ---
 
 # Sakrylle Web Implementation Status
@@ -66,7 +66,25 @@ Sakrylle branding/UI was advanced substantially in a follow-up session on `theme
 
 Path note: `/static/` maps to `static/static/` under the dev server and to `STATIC_DIR = backend/open_webui/static` under the backend (see `CLAUDE.md` → Local Development & Builds). Still upstream (gated, hidden at deploy or by `WEBUI_NAME`): community-sharing strings and the `About.svelte` attribution block.
 
+## Slim profile for 2c2g deploy (2026-06-11)
+
+The server build runs a "slim" profile so it fits a 2 vCPU / 2 GB RAM host. Design + plan: `docs/superpowers/specs/2026-06-11-slim-for-2c2g-design.md`, `docs/superpowers/plans/2026-06-11-slim-for-2c2g.md`. **Cut by default:** RAG / document upload / knowledge bases, in-process embeddings + vector store, in-app web search, code interpreter, the Ollama passthrough, and **Memories**. **Kept:** chat (OpenAI-compatible upstream), OIDC, admin, Notes/Calendar/Channels/Automations, Tools/MCP, and remote-proxy image-gen + audio (STT/TTS).
+
+Measured result: backend resident RAM dropped from ~1.4 GB to **~302 MB** (slim venv, no torch), the dependency set shrank by ~17 packages (torch, transformers, sentence-transformers, chromadb + 4 other vector-DB clients, playwright, OCR/`unstructured`/`nltk`, `langchain-classic`, `accelerate`, `faster-whisper`), and a no-vector-store **null backend** replaces chromadb.
+
+Two project-local env flags control router registration; both default to `False`:
+
+- `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER` — enables `/api/v1/retrieval/*` **and** `/api/v1/knowledge/*` and loads the sentence-transformers / chromadb / playwright stack. Setting this `True` against the slim `backend/requirements.txt` fails at import (`ModuleNotFoundError`); use a full-requirements image instead.
+- `SAKRYLLE_ENABLE_OLLAMA_ROUTER` — enables the `/ollama/*` passthrough. **Independent** from the upstream `ENABLE_OLLAMA_API` flag (which only affects admin UI).
+
+The frontend reads four booleans from `/api/config` `features` to hide UI entry points: `enable_retrieval`, `enable_web_search`, `enable_code_interpreter`, and `enable_ollama_api` (plus the existing `enable_memories`). All gated entry-point components remain in the tree — flipping the flags on (with the right deps installed) re-shows them; no frontend rebuild is needed for the slim ↔ full toggle.
+
+Other slim defaults flipped (overridable via env): `ENABLE_OLLAMA_API=False`, `ENABLE_CODE_EXECUTION=False`, `ENABLE_CODE_INTERPRETER=False`, `BYPASS_EMBEDDING_AND_RETRIEVAL=True`, `RAG_EMBEDDING_ENGINE=openai`, `VECTOR_DB=''` (→ null backend), `ENABLE_MEMORIES=False`, `ENABLE_VERSION_UPDATE_CHECK=False`. The production `npm run build` no longer runs `pyodide:fetch` (code interpreter is off).
+
+To run the **full** profile (RAG, web search, code interpreter, Ollama, Memories): use the full `requirements.txt`, set `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True` / `SAKRYLLE_ENABLE_OLLAMA_ROUTER=True`, and re-enable the corresponding `ENABLE_*` flags. None of this touches OIDC/Authlib, branding, or schema.
+
 ## Remaining blockers
 
 - Production IdP client registration and secret installation are external deployment actions and require separate approval.
 - Automated tests do not prove real OIDC login/logout; staging smoke testing is required.
+- Slim-profile end-to-end smoke (OIDC login → chat against the OpenAI-compatible upstream → remote image/audio round-trips) requires a configured upstream + IdP and must be run in staging; route-level and RAM verification passed locally on 2026-06-11.

@@ -1288,6 +1288,11 @@ RAG_ALLOWED_FILE_EXTENSIONS = ConfigVar(
     [ext.strip() for ext in os.getenv('RAG_ALLOWED_FILE_EXTENSIONS', '').split(',') if ext.strip()],
 )
 
+# Sakrylle slim default: 'openai' (was '' = local). Avoids loading
+# sentence-transformers / a local MiniLM model. Only consulted when retrieval is
+# re-enabled (SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True); then it requires a remote
+# embedding endpoint (e.g. OPENAI_API_KEY) — embeddings fail at request time, not
+# startup, if none is configured.
 RAG_EMBEDDING_ENGINE = ConfigVar(
     'RAG_EMBEDDING_ENGINE',
     'rag.embedding_engine',
