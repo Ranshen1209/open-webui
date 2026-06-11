@@ -79,7 +79,9 @@ Two project-local env flags control router registration; both default to `False`
 
 The frontend reads four booleans from `/api/config` `features` to hide UI entry points: `enable_retrieval`, `enable_web_search`, `enable_code_interpreter`, and `enable_ollama_api` (plus the existing `enable_memories`). All gated entry-point components remain in the tree — flipping the flags on (with the right deps installed) re-shows them; no frontend rebuild is needed for the slim ↔ full toggle.
 
-Other slim defaults flipped (overridable via env): `ENABLE_OLLAMA_API=False`, `ENABLE_CODE_EXECUTION=False`, `ENABLE_CODE_INTERPRETER=False`, `BYPASS_EMBEDDING_AND_RETRIEVAL=True`, `RAG_EMBEDDING_ENGINE=openai`, `VECTOR_DB=''` (→ null backend), `ENABLE_MEMORIES=False`, `ENABLE_VERSION_UPDATE_CHECK=False`. The production `npm run build` no longer runs `pyodide:fetch` (code interpreter is off).
+Other slim defaults flipped (overridable via env): `ENABLE_OLLAMA_API=False`, `ENABLE_CODE_EXECUTION=False`, `ENABLE_CODE_INTERPRETER=False`, `BYPASS_EMBEDDING_AND_RETRIEVAL=True`, `RAG_EMBEDDING_ENGINE=openai`, `VECTOR_DB=''` (→ null backend), `ENABLE_MEMORIES=False`, `ENABLE_VERSION_UPDATE_CHECK=False`. The production `npm run build` no longer runs `pyodide:fetch` (code interpreter is off). The built-in `knowledge` chat tools are gated on `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER` so models aren't offered RAG tools that can't work in slim mode.
+
+**Audio (STT/TTS) requires a remote engine.** Local Whisper (`faster-whisper`) is removed from the slim image, but `AUDIO_STT_ENGINE` still defaults to `''` (local). For speech-to-text to work, an admin must set `AUDIO_STT_ENGINE` to a remote engine (e.g. `openai`) with the matching endpoint/key in Admin → Settings → Audio; otherwise transcription returns a 500. TTS is unaffected (already remote/browser).
 
 To run the **full** profile (RAG, web search, code interpreter, Ollama, Memories): use the full `requirements.txt`, set `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True` / `SAKRYLLE_ENABLE_OLLAMA_ROUTER=True`, and re-enable the corresponding `ENABLE_*` flags. None of this touches OIDC/Authlib, branding, or schema.
 
