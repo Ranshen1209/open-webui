@@ -40,6 +40,7 @@ from open_webui.env import (
     FORWARD_SESSION_INFO_HEADER_CHAT_ID,
     FORWARD_SESSION_INFO_HEADER_MESSAGE_ID,
     REDIS_KEY_PREFIX,
+    SAKRYLLE_ENABLE_RETRIEVAL_ROUTER,
 )
 from open_webui.models.access_grants import AccessGrants
 from open_webui.models.groups import Groups
@@ -473,7 +474,7 @@ async def get_builtin_tools(
     folder_knowledge = extra_params.get('__metadata__', {}).get('folder_knowledge')
     if folder_knowledge:
         model_knowledge = list(model_knowledge or []) + list(folder_knowledge)
-    if is_builtin_tool_enabled('knowledge'):
+    if SAKRYLLE_ENABLE_RETRIEVAL_ROUTER and is_builtin_tool_enabled('knowledge'):
         from open_webui.env import ENABLE_KB_EXEC
 
         if ENABLE_KB_EXEC:

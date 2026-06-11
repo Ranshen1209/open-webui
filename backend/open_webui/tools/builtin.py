@@ -2555,7 +2555,12 @@ async def query_knowledge_bases(
 
         user_id = __user__.get('id')
         user_group_ids = [group.id for group in await Groups.get_groups_by_member_id(user_id)]
-        query_embedding = await __request__.app.state.EMBEDDING_FUNCTION(query)
+
+        embedding_function = __request__.app.state.EMBEDDING_FUNCTION
+        if not embedding_function:
+            return json.dumps({'error': 'Embedding function not configured'})
+
+        query_embedding = await embedding_function(query)
 
         # Min-heap of (distance, knowledge_base_id) - only holds top `count` results
         top_results_heap = []
