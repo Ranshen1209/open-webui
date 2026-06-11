@@ -19,19 +19,31 @@ Goal: shrink resident RAM to **< 700 MB** and image size to **< 2.5 GB**, withou
 
 ## 2. Scope
 
+> **Revision 2026-06-11 (post-implementation, during Task 3):** Memories was
+> moved from "in scope" to "out of scope." Rationale: Memories is a mini-RAG —
+> it embeds each memory (`EMBEDDING_FUNCTION`) and stores/searches it in a vector
+> DB (`ASYNC_VECTOR_DB_CLIENT`). Keeping it would force retaining either
+> `sentence-transformers` (local embed) or a live vector store (chromadb),
+> defeating the RAM goal. With Memories cut, **no preserved feature needs a
+> functional vector store or embeddings**, so a null vector backend (see §4.6)
+> replaces chromadb entirely. This also surfaced a gap the original design
+> missed: `routers/files.py` and `tools/builtin.py` import the vector-DB factory
+> at module load regardless of router gating, so `VECTOR_DB=''` crashed at
+> import until the null backend was added.
+
 ### In scope (preserved)
 - Chat UI, chat history, model selector against OpenAI-compatible upstreams
 - Admin panel (users, model config, system settings)
 - OIDC / Authlib auth flow (Sakrylle SSO) — **untouched** per CLAUDE.md governance
-- Memories feature
 - Notes / Calendar / Channels / Automations pages
-- Tools / MCP / function-calling routes
+- Tools / MCP / function-calling routes (built-in memory/knowledge tools degrade to no-ops)
 - Image generation — **proxy mode only** (remote API)
 - Audio STT/TTS — **proxy mode only** (OpenAI Whisper / TTS or equivalent)
 - Socket.IO real-time chat streaming
 - Sakrylle branding, theme, favicons, manifests
 
 ### Out of scope (cut on the server)
+- **Memories** (cut in revision — `ENABLE_MEMORIES` default `False`, UI hidden)
 - Document upload / knowledge bases / RAG retrieval
 - In-process embedding (`sentence-transformers`, MiniLM auto-fetch)
 - In-process reranking (`colbert`, cross-encoder)
@@ -177,6 +189,31 @@ Hide entry points behind `$config.features.*` flags. **Do not delete components*
 | Admin → Connections → Ollama block | `src/lib/components/admin/Settings/Connections.svelte` | `$config?.features?.enable_ollama_api` (existing flag) |
 
 The exact filenames above are the documented Open WebUI layout per `CLAUDE.md`; if the implementer finds a renamed file during execution, the rule is "gate the entry point that drives this user flow," not "edit this exact path."
+
+Additionally (revision): hide the **Memories** UI wherever `$config?.features?.enable_memories` is false. This flag already exists in `/api/config`; setting `ENABLE_MEMORIES` default to `False` flips it. Upstream Open WebUI already consumes this flag in the Settings → Personalization area, so frontend changes here may be minimal — verify and add guards only where the entry point isn't already gated.
+
+### 4.6 Null vector backend (revision)
+
+**Problem the original design missed:** `routers/files.py` (file-deletion cleanup) and `tools/builtin.py` (built-in memory/knowledge tools) import `open_webui.retrieval.vector.async_client` at module top level. That module instantiates `VECTOR_DB_CLIENT = Vector.get_vector(VECTOR_DB)` at import time in `factory.py`. These routers are always-on, so the factory runs on every startup regardless of whether the `retrieval` router is gated. With `VECTOR_DB=''` (the slim default), `factory.py`'s `match` falls through to `case _: raise ValueError`, crashing the backend at import.
+
+**Fix:** add a null backend that satisfies the `VectorDBBase` interface with no-ops, selected when `VECTOR_DB` is empty or `'none'`.
+
+- New file: `backend/open_webui/retrieval/vector/dbs/noop.py` — `NoOpVectorClient(VectorDBBase)`:
+  - `has_collection` → `False`
+  - `search` / `query` / `get` → `None`
+  - `insert` / `upsert` / `delete` / `delete_collection` / `reset` → no-op (`return None`)
+- `factory.py`: add `case '' | 'none':` before `case _:` returning `NoOpVectorClient()`.
+
+**Consequences:**
+- `files.py` cleanup deletes become silent no-ops (there are no vectors to delete — acceptable).
+- `tools/builtin.py` knowledge-search tool returns `None`/empty if a model invokes it; `EMBEDDING_FUNCTION` is `None` in slim mode, so that tool path degrades rather than crashes the process. Acceptable: RAG is out of scope.
+- No chromadb, no torch, no sentence-transformers needed — they stay in the §4.3 prune list.
+- Fully reversible: set `VECTOR_DB=chroma`, reinstall chromadb, flip `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True`.
+
+### 4.7 Knowledge & Memories router gating (revision)
+
+- **`knowledge` router** (knowledge bases = RAG document collections): gate its registration in `main.py` behind `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER` (same family as retrieval). Its module still imports `async_client` at top, which is now safe via the null backend.
+- **`memories` router**: leave registered (its module import is null-backend-safe), but every endpoint already guards on `app.state.config.ENABLE_MEMORIES` and 404s when false. Setting `ENABLE_MEMORIES` default `False` (config.py) disables the feature without touching the router wiring.
 
 ## 5. Data Flow Impact
 
