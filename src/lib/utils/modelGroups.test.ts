@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { deriveGroups, resolveSelectedGroupId, formatGroupLabel } from './modelGroups';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { deriveGroups, resolveSelectedGroupId, formatGroupLabel, getSavedGroupId, saveGroupId } from './modelGroups';
 
 const item = (groupId?: number, name?: string, rate?: number) => ({
 	model: groupId == null ? {} : { group: { id: groupId, name, rate_multiplier: rate } }
@@ -51,5 +51,49 @@ describe('formatGroupLabel', () => {
 	});
 	it('shows only name when multiplier missing', () => {
 		expect(formatGroupLabel({ id: 1, name: 'GPT-Pro' })).toBe('GPT-Pro');
+	});
+});
+
+describe('getSavedGroupId / saveGroupId', () => {
+	beforeEach(() => {
+		const store = new Map<string, string>();
+		vi.stubGlobal('localStorage', {
+			getItem: (k: string) => (store.has(k) ? (store.get(k) as string) : null),
+			setItem: (k: string, v: string) => {
+				store.set(k, String(v));
+			},
+			removeItem: (k: string) => {
+				store.delete(k);
+			}
+		});
+	});
+	afterEach(() => vi.unstubAllGlobals());
+
+	it('round-trips a saved id', () => {
+		saveGroupId(12);
+		expect(getSavedGroupId()).toBe(12);
+	});
+
+	it('returns null when nothing saved', () => {
+		expect(getSavedGroupId()).toBeNull();
+	});
+
+	it('returns null for a non-numeric stored value', () => {
+		localStorage.setItem('sakrylle-web.selected-model-group', 'abc');
+		expect(getSavedGroupId()).toBeNull();
+	});
+
+	it('recovers from storage errors without throwing', () => {
+		vi.stubGlobal('localStorage', {
+			getItem: () => {
+				throw new Error('blocked');
+			},
+			setItem: () => {
+				throw new Error('blocked');
+			},
+			removeItem: () => {}
+		});
+		expect(getSavedGroupId()).toBeNull();
+		expect(() => saveGroupId(1)).not.toThrow();
 	});
 });

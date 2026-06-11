@@ -1,5 +1,5 @@
-// Sakrylle 模型分组的纯逻辑 + localStorage 薄封装。
-// 分组数据来自 /v1/models?groups=all 返回的每个模型 model.group:{id,name,rate_multiplier}。
+// Pure logic + thin localStorage wrappers for Sakrylle model groups.
+// Group data comes from each model's `group:{id,name,rate_multiplier}` in /v1/models?groups=all.
 
 export interface ModelGroup {
 	id: number;
@@ -7,17 +7,17 @@ export interface ModelGroup {
 	rate_multiplier?: number;
 }
 
-/** 本部署的默认分组名（精确名匹配）。换默认组只改这里。 */
+/** Default group name for this deployment (exact-name match). Change the default group here. */
 export const DEFAULT_MODEL_GROUP_NAME = 'GPT-Pro';
 
 const STORAGE_KEY = 'sakrylle-web.selected-model-group';
 
-/** 从选择器 items 派生去重分组，按 name 升序。无 group 的模型忽略。 */
+/** Derive deduped groups from selector items, sorted by name asc. Models without a group are ignored. */
 export function deriveGroups(items: Array<{ model?: any }>): ModelGroup[] {
 	const map = new Map<number, ModelGroup>();
 	for (const item of items ?? []) {
 		const g = item?.model?.group;
-		if (!g || typeof g.id !== 'number') continue;
+		if (g == null || typeof g.id !== 'number') continue;
 		if (!map.has(g.id)) {
 			map.set(g.id, {
 				id: g.id,
@@ -29,7 +29,7 @@ export function deriveGroups(items: Array<{ model?: any }>): ModelGroup[] {
 	return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-/** 选中组优先级：已保存(仍可用) > 默认名组 > 第一个组。 */
+/** Selected-group priority: saved (if still available) > default-named > first. */
 export function resolveSelectedGroupId(
 	groups: ModelGroup[],
 	savedId: number | null,
@@ -42,7 +42,7 @@ export function resolveSelectedGroupId(
 	return groups[0].id;
 }
 
-/** 下拉项文案：有倍率显示 "Name ·2x"，否则只显示名字。 */
+/** Dropdown label: "Name ·2x" when rate_multiplier present, else just the name. */
 export function formatGroupLabel(group: ModelGroup): string {
 	return group.rate_multiplier != null ? `${group.name} ·${group.rate_multiplier}x` : group.name;
 }
