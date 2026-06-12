@@ -20,6 +20,10 @@ services:
       - /opt/stack/sakrylle-web/static:/app/backend/open_webui/static/static:ro
     env_file:
       - /opt/stack/sakrylle-web/.env
+    environment:
+      # Use the browser Web Speech API for STT (no server-side Whisper).
+      # Cloud STT engines remain selectable via the admin panel.
+      - AUDIO_STT_ENGINE=web
     networks:
       - stack_default
     ports:
