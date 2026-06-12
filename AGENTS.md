@@ -118,7 +118,7 @@ make install                      # Same as above (uses docker compose)
 
 ### Branch & Theme Notes
 
-The current branch `theme/sakrylle` rebrands the app as "Sakrylle Web" (`WEBUI_NAME` defaults to this in `env.py` line 771). The main branch is `main`. Branding: Monet Purple theme (`primary-*`/`accent-*` tokens in `src/tailwind.css`), cherry-blossom favicon, sakura-skinned onboarding/auth; product-local status in `oidc-docs/implementation-status.md`.
+The current branch `theme/sakrylle` rebrands the app as "Sakrylle Web" (`WEBUI_NAME` defaults to this in `env.py` line 771). The main branch is `main`.
 
 
 ## Sakrylle OIDC Documentation Governance
@@ -141,10 +141,10 @@ The current branch `theme/sakrylle` rebrands the app as "Sakrylle Web" (`WEBUI_N
 
 ## Local Development & Builds
 
-During development, build and run locally on this machine — don't wait on CI or the server for dev iteration.
+During development, build and run locally on this machine (ample: 64GB RAM / 10 cores) — don't wait on CI or the server for dev iteration.
 
-- **Frontend iteration (most work):** `npm run dev` (Vite HMR at `localhost:5173`) — near-instant; covers ~all theme/branding/UI work. No backend needed to eyeball most pages (API-dependent pages render the "backend required" screen).
-- **Backend (native), managed via `uv`:** Python 3.12 venv at `.venv` (`uv venv --python 3.12`); `uv pip install -r backend/requirements.txt` (heavy: torch/chromadb/onnxruntime — a **one-time** cost, cached in `~/.cache/uv`). Run from `backend/`: `../.venv/bin/uvicorn open_webui.main:app --host 127.0.0.1 --port 8080` (add `--reload`). Set `RAG_EMBEDDING_ENGINE=openai` to skip the embedding-model download at boot; `ENABLE_OLLAMA_API=False` when no Ollama. The backend serves `FRONTEND_BUILD_DIR` (default repo `build/`); `npm run build` to refresh it.
-- **Local Docker image build:** runtime is Colima (`colima start --cpu 6 --memory 12 --disk 80`); buildx linked at `~/.docker/cli-plugins/`. The in-build container network on this host is flaky (npm/pip `ECONNRESET`) — pre-pull base images and retry, or build the frontend on the host and `COPY` it in.
-- **Deploy/release image is CI, not local:** `.github/workflows/build-sakrylle-web.yml` builds the **amd64** image on push to `theme/sakrylle` and pushes to `ghcr.io/ranshen1209/sakrylle-web`; the server (`deploy/docker-compose.sakrylle-web.yml`) only `pull`s it. This Mac is **arm64** — local builds are arm64 (local testing), not the amd64 deploy artifact.
-- **Theme/static gotchas:** color tokens in `src/tailwind.css` `@theme` (`primary-*` Monet Purple, `accent-*` sakura); `/static/` maps to `static/static/` in dev and `STATIC_DIR = backend/open_webui/static` in the backend; `static/brand/` is the canonical brand source; browsers prefer `favicon.svg`.
+- **Frontend iteration (most work):** `npm run dev` (Vite HMR at `localhost:5173`) — near-instant; covers ~all theme/branding/UI work. No backend needed to eyeball most pages (API-dependent pages render the "backend required" screen). The favicon/theme/branding changes are all frontend and show immediately here.
+- **Backend (native), managed via `uv`:** Python 3.12 venv at `.venv` (`uv venv --python 3.12`); install deps with `uv pip install -r backend/requirements.txt` (heavy: torch/chromadb/onnxruntime/opencv, several GB — a **one-time** cost, reused after). Run from `backend/`: `../.venv/bin/uvicorn open_webui.main:app --host 127.0.0.1 --port 8080` (add `--reload` for auto-restart on save). The backend serves `FRONTEND_BUILD_DIR` (default repo `build/`); run `npm run build` to refresh it when the backend must serve the production frontend.
+- **Local Docker image build (when needed):** runtime is Colima (`colima start --cpu 6 --memory 12 --disk 80`); buildx is linked at `~/.docker/cli-plugins/docker-buildx`. The in-build container network on this host is flaky (npm/pip `ECONNRESET`) — pre-pull base images (`docker pull node:22-alpine3.20 python:3.11-slim-bookworm docker/dockerfile:1`) and retry, or build the frontend on the host and `COPY` it in to drop the in-container `npm ci` step.
+- **Deploy/release image is still CI, not local:** `.github/workflows/build-sakrylle-web.yml` builds the **amd64** image on push to `theme/sakrylle` and pushes to `ghcr.io/ranshen1209/sakrylle-web`; the server (`deploy/docker-compose.sakrylle-web.yml`) only `pull`s it. This Mac is **arm64** — local Docker builds are arm64 (fine for local testing), not the amd64 deploy artifact; producing amd64 locally needs QEMU emulation (slow). Confirm server arch before any local release build.
+- **Favicon/static `/static/` mapping (gotcha):** in `npm run dev`, `/static/...` resolves to `static/static/` (SvelteKit serves project `static/` at `/`); in the backend it resolves to `STATIC_DIR = backend/open_webui/static`. `static/brand/` is the tracked canonical brand source. Browsers prefer `favicon.svg` over the PNGs. Update all three (`static/static/`, `backend/open_webui/static/`, `static/brand/`) when changing icons.
