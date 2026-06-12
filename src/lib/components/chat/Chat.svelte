@@ -12,7 +12,7 @@
 
 	import { get, type Unsubscriber, type Writable } from 'svelte/store';
 	import type { i18n as i18nType } from 'i18next';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL, HIDE_VOICE_FEATURES } from '$lib/constants';
 	import equal from 'fast-deep-equal';
 
 	import {
@@ -1322,7 +1322,7 @@
 			}
 		}
 
-		if ($page.url.searchParams.get('call') === 'true') {
+		if (!HIDE_VOICE_FEATURES && $page.url.searchParams.get('call') === 'true') {
 			showCallOverlay.set(true);
 			showControls.set(true);
 		}
@@ -1332,7 +1332,7 @@
 			const event = $desktopEvent;
 			desktopEvent.set(null);
 
-			if (event.type === 'call') {
+			if (event.type === 'call' && !HIDE_VOICE_FEATURES) {
 				// Defer to next macrotask so the call overlay isn't clobbered by
 				// showControlsSubscribe's initial callback (value=false → set(false))
 				// which runs as a pending microtask after this function.
