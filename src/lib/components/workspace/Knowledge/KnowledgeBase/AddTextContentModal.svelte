@@ -11,6 +11,7 @@
 	import MicSolid from '$lib/components/icons/MicSolid.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import VoiceRecording from '$lib/components/chat/MessageInput/VoiceRecording.svelte';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants';
 	export let show = false;
 
 	let name = $i18n.t('Untitled');
@@ -94,6 +95,7 @@
 							/>
 						</div>
 					{:else}
+						{#if !HIDE_VOICE_FEATURES}
 						<Tooltip content={$i18n.t('Voice Input')}>
 							<button
 								class=" p-2 bg-gray-50 text-gray-700 dark:bg-gray-700 dark:text-white transition rounded-full"
@@ -125,6 +127,7 @@
 								<MicSolid className="size-5" />
 							</button>
 						</Tooltip>
+						{/if}
 					{/if}
 				</div>
 
