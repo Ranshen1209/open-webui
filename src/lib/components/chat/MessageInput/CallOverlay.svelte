@@ -45,6 +45,9 @@
 	let audioStream = null;
 	let audioChunks = [];
 
+	let speechRecognition = null;
+	let webSpeechTranscript = '';
+
 	let videoInputDevices = [];
 	let selectedVideoInputDeviceId = null;
 
@@ -154,14 +157,95 @@
 	const MIN_DECIBELS = -55;
 	const VISUALIZER_BUFFER_LENGTH = 300;
 
+	const isWebSTT = () =>
+		($config?.audio?.stt?.engine ?? '') === 'web' ||
+		($settings?.audio?.stt?.engine ?? '') === 'web';
+
+	const startWebSpeechRecognition = () => {
+		if (speechRecognition) return true;
+
+		if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+			toast.error($i18n.t('Speech recognition is not supported in this browser.'));
+			return false;
+		}
+
+		speechRecognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+		speechRecognition.continuous = true;
+		speechRecognition.interimResults = false;
+
+		const lang = $settings?.audio?.stt?.language;
+		if (lang) {
+			speechRecognition.lang = lang;
+		}
+
+		speechRecognition.onresult = (event) => {
+			for (let i = event.resultIndex; i < event.results.length; i++) {
+				if (event.results[i].isFinal) {
+					webSpeechTranscript = `${webSpeechTranscript}${event.results[i][0].transcript}`;
+				}
+			}
+		};
+
+		speechRecognition.onerror = (event) => {
+			console.log('Web speech recognition error:', event);
+			if (event.error !== 'no-speech' && event.error !== 'aborted') {
+				toast.error($i18n.t(`Speech recognition error: {{error}}`, { error: event.error }));
+			}
+		};
+
+		speechRecognition.onend = () => {
+			// Keep recognition continuous for the duration of the call.
+			if ($showCallOverlay && speechRecognition) {
+				try {
+					speechRecognition.start();
+				} catch (error) {
+					console.log('Web speech recognition restart failed:', error);
+				}
+			}
+		};
+
+		try {
+			speechRecognition.start();
+		} catch (error) {
+			console.log('Web speech recognition start failed:', error);
+		}
+		return true;
+	};
+
+	const stopWebSpeechRecognition = () => {
+		if (speechRecognition) {
+			const recognition = speechRecognition;
+			speechRecognition = null; // null first so onend does not restart
+			try {
+				recognition.stop();
+			} catch (error) {
+				console.log('Error stopping web speech recognition:', error);
+			}
+		}
+		webSpeechTranscript = '';
+	};
+
 	const transcribeHandler = async (audioBlob) => {
+		await tick();
+
+		// Browser-native STT (Web Speech API): use the transcript accumulated by
+		// SpeechRecognition instead of uploading audio to the backend.
+		if (isWebSTT()) {
+			const text = webSpeechTranscript.trim();
+			webSpeechTranscript = '';
+			if (text !== '') {
+				const _responses = await submitPrompt(text, { _raw: true });
+				console.log(_responses);
+			}
+			return;
+		}
+
 		// Create a blob from the audio chunks
 		if (!audioBlob || audioBlob.size < 100) {
 			console.log('Audio blob too small or empty, skipping transcription');
 			return;
 		}
 
-		await tick();
 		const file = blobToFile(audioBlob, 'recording.wav');
 
 		const res = await transcribeAudio(
@@ -265,10 +349,16 @@
 			};
 
 			analyseAudio(audioStream);
+
+			if (isWebSTT()) {
+				startWebSpeechRecognition();
+			}
 		}
 	};
 
 	const stopAudioStream = async () => {
+		stopWebSpeechRecognition();
+
 		try {
 			if (mediaRecorder) {
 				mediaRecorder.stop();
