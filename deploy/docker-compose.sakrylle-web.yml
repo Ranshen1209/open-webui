@@ -24,6 +24,12 @@ services:
       # Use the browser Web Speech API for STT (no server-side Whisper).
       # Cloud STT engines remain selectable via the admin panel.
       - AUDIO_STT_ENGINE=web
+      # Mount the retrieval router so files can be uploaded. Defaults keep this
+      # lightweight: BYPASS_EMBEDDING_AND_RETRIEVAL=True (full-context inject, no
+      # embeddings), VECTOR_DB='' (NoOp backend, no chromadb). No heavy ML loads;
+      # no OpenAI key needed while bypass stays on. Full document text is injected
+      # into context (subject to the model's context window) — no RAG/knowledge base.
+      - SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True
     networks:
       - stack_default
     ports:
