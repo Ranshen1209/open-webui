@@ -113,6 +113,10 @@ export const DEFAULT_CAPABILITIES = {
 
 export const PASTED_TEXT_CHARACTER_LIMIT = 1000;
 
+// Sakrylle: voice (STT/TTS) is off by default — hide all its UI entry points.
+// Backend audio routes/config remain intact; flip to false to restore voice.
+export const HIDE_VOICE_FEATURES = true;
+
 // Source: https://kit.svelte.dev/docs/modules#$env-static-public
 // This feature, akin to $env/static/private, exclusively incorporates environment variables
 // that are prefixed with config.kit.env.publicPrefix (usually set to PUBLIC_).
