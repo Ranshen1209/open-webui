@@ -7,17 +7,18 @@ Status: Approved, ready for implementation plan
 ## Goal
 
 Hide every speech-to-text (STT) and text-to-speech (TTS) entry point from the
-Sakrylle Web UI behind one frontend constant that defaults to **off**. The
-backend audio routes, config, and dependencies remain intact, as do the earlier
-Web Speech default-STT changes. Flipping the constant back to `true` restores
-all voice features.
+Sakrylle Web UI behind one frontend constant. Voice features are **off by
+default**, so the hide switch defaults to **on** (`true`). The backend audio
+routes, config, and dependencies remain intact, as do the earlier Web Speech
+default-STT changes. Flipping the constant to `false` restores all voice
+features.
 
 ## Decisions
 
-- A single build-time constant `VOICE_FEATURES_ENABLED` in
-  `src/lib/constants.ts`, default `false`.
+- A single build-time constant `HIDE_VOICE_FEATURES` in
+  `src/lib/constants.ts`, default `true` (voice hidden / off by default).
 - Each entry point imports the constant and wraps its rendered button / tab /
-  trigger in `{#if VOICE_FEATURES_ENABLED}`.
+  trigger in `{#if !HIDE_VOICE_FEATURES}`.
 - Approach A (wrap, do not delete): voice components
   (`VoiceRecording.svelte`, `CallOverlay.svelte`, `Settings/Audio.svelte`,
   `admin/Settings/Audio.svelte`) stay in the codebase, just unreferenced from
@@ -29,9 +30,9 @@ all voice features.
 
 ```ts
 // src/lib/constants.ts
-// Sakrylle: hide all voice (STT/TTS) entry points in the UI.
-// Backend audio routes/config remain intact; flip to true to restore.
-export const VOICE_FEATURES_ENABLED = false;
+// Sakrylle: voice (STT/TTS) is off by default — hide all its UI entry points.
+// Backend audio routes/config remain intact; flip to false to restore voice.
+export const HIDE_VOICE_FEATURES = true;
 ```
 
 ## Entry Points to Gate
@@ -50,9 +51,9 @@ export const VOICE_FEATURES_ENABLED = false;
 
 - Wrap only the **entry-point rendering** — the button, the tab list item, and
   the tab content branch. Do not delete components or unrelated imports.
-- **Auto-read TTS:** in `ResponseMessage.svelte`, when the switch is off, skip
-  the automatic speak-on-response logic so no TTS request is made in the
-  background (not just hiding the button).
+- **Auto-read TTS:** in `ResponseMessage.svelte`, when voice is hidden
+  (`HIDE_VOICE_FEATURES`), skip the automatic speak-on-response logic so no TTS
+  request is made in the background (not just hiding the button).
 - **Tab lists (items 6, 7):** the Voice/Audio tab is removed from both the
   navigation list and the rendered content. When implementing, verify the tab
   array / `selectedTab` routing has no out-of-range index or broken
@@ -84,5 +85,5 @@ export const VOICE_FEATURES_ENABLED = false;
   channel, notes, and knowledge-base text modal; no read-aloud button on
   responses and no auto-read; no "Voice" tab in user settings; no "Audio" tab
   in admin settings.
-- Flip `VOICE_FEATURES_ENABLED` to `true` and confirm one representative entry
+- Flip `HIDE_VOICE_FEATURES` to `false` and confirm one representative entry
   point (e.g. chat mic button) reappears — proving reversibility.
