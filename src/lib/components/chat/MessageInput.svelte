@@ -61,7 +61,12 @@
 	import { getTools } from '$lib/apis/tools';
 	import { getSkills } from '$lib/apis/skills';
 
-	import { WEBUI_BASE_URL, WEBUI_API_BASE_URL, PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants';
+	import {
+		WEBUI_BASE_URL,
+		WEBUI_API_BASE_URL,
+		PASTED_TEXT_CHARACTER_LIMIT,
+		HIDE_VOICE_FEATURES
+	} from '$lib/constants';
 	import { getOAuthClientAuthorizationUrl } from '$lib/apis/configs';
 
 	import { createNoteHandler } from '../notes/utils';
@@ -1990,6 +1995,7 @@
 
 											{#if $_user?.role === 'admin' || ($_user?.permissions?.chat?.stt ?? true)}
 												<!-- {$i18n.t('Record voice')} -->
+												{#if !HIDE_VOICE_FEATURES}
 												<Tooltip content={$i18n.t('Dictate')}>
 													<button
 														id="voice-input-button"
@@ -2036,10 +2042,12 @@
 														</svg>
 													</button>
 												</Tooltip>
+												{/if}
 											{/if}
 										{/if}
 
 										{#if prompt === '' && files.length === 0 && ($_user?.role === 'admin' || ($_user?.permissions?.chat?.call ?? true))}
+											{#if !HIDE_VOICE_FEATURES}
 											<div class=" flex items-center">
 												<!-- {$i18n.t('Call')} -->
 												<Tooltip content={$i18n.t('Voice mode')}>
@@ -2102,6 +2110,7 @@
 													</button>
 												</Tooltip>
 											</div>
+											{/if}
 										{:else}
 											<div class=" flex items-center">
 												<Tooltip
