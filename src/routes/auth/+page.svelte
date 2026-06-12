@@ -157,10 +157,10 @@
 
 			if (isDarkMode) {
 				const darkImage = new Image();
-				darkImage.src = `${WEBUI_BASE_URL}/static/favicon-dark.png`;
+				darkImage.src = `/static/favicon-dark.png`;
 
 				darkImage.onload = () => {
-					logo.src = `${WEBUI_BASE_URL}/static/favicon-dark.png`;
+					logo.src = `/static/favicon-dark.png`;
 					logo.style.filter = ''; // Ensure no inversion is applied if favicon-dark.png exists
 				};
 
@@ -268,18 +268,18 @@
 					</div>
 				{:else}
 					<div class="my-auto flex flex-col justify-center items-center">
-						<div class=" sm:max-w-md my-auto pb-10 w-full dark:text-gray-100">
-							{#if $config?.metadata?.auth_logo_position === 'center'}
-								<div class="flex justify-center mb-6">
-									<img
-										id="logo"
-										crossorigin="anonymous"
-										src="{WEBUI_BASE_URL}/static/favicon.png"
-										class="size-24 rounded-full"
-										alt="{$WEBUI_NAME} logo"
-									/>
-								</div>
-							{/if}
+						<div
+							class="sm:max-w-md my-auto w-full dark:text-gray-100 bg-white/60 dark:bg-black/40 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 dark:border-white/10 p-8"
+						>
+							<div class="flex justify-center mb-6">
+								<img
+									id="logo"
+									crossorigin="anonymous"
+									src="/static/favicon.png"
+									class="size-20 rounded-full"
+									alt="{$WEBUI_NAME} logo"
+								/>
+							</div>
 							<form
 								class=" flex flex-col justify-center"
 								on:submit={(e) => {
@@ -321,7 +321,7 @@
 													bind:value={name}
 													type="text"
 													id="name"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent placeholder:text-gray-300 dark:placeholder:text-gray-600"
+													class="my-0.5 w-full text-sm rounded-lg px-3 py-2 outline-hidden border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition focus:border-accent-400 placeholder:text-gray-400 dark:placeholder:text-gray-600"
 													autocomplete="name"
 													placeholder={$i18n.t('Enter Your Full Name')}
 													required
@@ -337,7 +337,7 @@
 												<input
 													bind:value={ldapUsername}
 													type="text"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent placeholder:text-gray-300 dark:placeholder:text-gray-600"
+													class="my-0.5 w-full text-sm rounded-lg px-3 py-2 outline-hidden border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition focus:border-accent-400 placeholder:text-gray-400 dark:placeholder:text-gray-600"
 													autocomplete="username"
 													name="username"
 													id="username"
@@ -354,7 +354,7 @@
 													bind:value={email}
 													type="email"
 													id="email"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent placeholder:text-gray-300 dark:placeholder:text-gray-600"
+													class="my-0.5 w-full text-sm rounded-lg px-3 py-2 outline-hidden border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition focus:border-accent-400 placeholder:text-gray-400 dark:placeholder:text-gray-600"
 													autocomplete="email"
 													name="email"
 													placeholder={$i18n.t('Enter Your Email')}
@@ -371,7 +371,8 @@
 												bind:value={password}
 												type="password"
 												id="password"
-												class="my-0.5 w-full text-sm outline-hidden bg-transparent placeholder:text-gray-300 dark:placeholder:text-gray-600"
+												outerClassName="flex flex-1 my-0.5 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition focus-within:border-accent-400"
+												inputClassName="w-full text-sm bg-transparent outline-hidden"
 												placeholder={$i18n.t('Enter Your Password')}
 												autocomplete={mode === 'signup' ? 'new-password' : 'current-password'}
 												name="password"
@@ -392,7 +393,8 @@
 													bind:value={confirmPassword}
 													type="password"
 													id="confirm-password"
-													class="my-0.5 w-full text-sm outline-hidden bg-transparent"
+													outerClassName="flex flex-1 my-0.5 rounded-lg px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition focus-within:border-accent-400"
+													inputClassName="w-full text-sm bg-transparent outline-hidden"
 													placeholder={$i18n.t('Confirm Your Password')}
 													autocomplete="new-password"
 													name="confirm-password"
@@ -406,14 +408,14 @@
 									{#if $config?.features.enable_login_form || $config?.features.enable_ldap || form}
 										{#if mode === 'ldap'}
 											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+												class="bg-accent-500 hover:bg-accent-400 text-accent-950 transition w-full rounded-full font-medium text-sm py-2.5"
 												type="submit"
 											>
 												{$i18n.t('Authenticate')}
 											</button>
 										{:else}
 											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+												class="bg-accent-500 hover:bg-accent-400 text-accent-950 transition w-full rounded-full font-medium text-sm py-2.5"
 												type="submit"
 											>
 												{mode === 'signin'
@@ -619,14 +621,14 @@
 			</div>
 		</div>
 
-		{#if !$config?.metadata?.auth_logo_position}
+		{#if ($config?.features.auth_trusted_header ?? false) || $config?.features.auth === false}
 			<div class="fixed m-10 z-50">
 				<div class="flex space-x-2">
 					<div class=" self-center">
 						<img
 							id="logo"
 							crossorigin="anonymous"
-							src="{WEBUI_BASE_URL}/static/favicon.png"
+							src="/static/favicon.png"
 							class=" w-6 rounded-full"
 							alt=""
 						/>
