@@ -2,6 +2,7 @@
 	import { getContext, onMount, tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { config, models, settings, user } from '$lib/stores';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants';
 	import { updateUserSettings } from '$lib/apis/users';
 	import { getModels as _getModels } from '$lib/apis';
 	import { goto } from '$app/navigation';
@@ -505,6 +506,10 @@
 					$config?.features?.enable_memories &&
 					($user?.role === 'admin' || ($user?.permissions?.features?.memories ?? true))
 				);
+			}
+
+			if (tab.id === 'audio') {
+				return !HIDE_VOICE_FEATURES;
 			}
 
 			return true;
