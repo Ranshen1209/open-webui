@@ -24,7 +24,7 @@
 	import { getSessionUser } from '$lib/apis/auths';
 
 	import { uploadFile } from '$lib/apis/files';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, HIDE_VOICE_FEATURES } from '$lib/constants';
 
 	import { getSuggestionRenderer } from '../common/RichTextInput/suggestions';
 	import CommandSuggestionList from '../chat/MessageInput/CommandSuggestionList.svelte';
@@ -1014,6 +1014,7 @@
 
 								<div class="self-end flex space-x-1 mr-1">
 									{#if content === ''}
+										{#if !HIDE_VOICE_FEATURES}
 										<Tooltip content={$i18n.t('Record voice')}>
 											<button
 												id="voice-input-button"
@@ -1060,6 +1061,7 @@
 												</svg>
 											</button>
 										</Tooltip>
+										{/if}
 									{/if}
 
 									<div class=" flex items-center">
