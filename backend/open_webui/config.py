@@ -2327,7 +2327,7 @@ AUDIO_STT_OPENAI_API_KEY = ConfigVar(
 AUDIO_STT_ENGINE = ConfigVar(
     'AUDIO_STT_ENGINE',
     'audio.stt.engine',
-    os.getenv('AUDIO_STT_ENGINE', ''),
+    os.getenv('AUDIO_STT_ENGINE', 'web'),
 )
 
 AUDIO_STT_MODEL = ConfigVar(
