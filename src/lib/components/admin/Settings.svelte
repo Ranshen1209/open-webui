@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import { config } from '$lib/stores';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants';
 	import { getBackendConfig } from '$lib/apis';
 	import Database from './Settings/Database.svelte';
 
@@ -52,6 +53,9 @@
 		].includes(tabFromPath)
 			? tabFromPath
 			: 'general';
+		if (HIDE_VOICE_FEATURES && selectedTab === 'audio') {
+			selectedTab = 'general';
+		}
 	}
 
 	$: if (selectedTab) {
@@ -247,7 +251,7 @@
 			route: '/admin/settings/db',
 			keywords: ['database', 'export', 'import', 'backup', 'chats', 'users']
 		}
-	];
+	].filter((s) => !(HIDE_VOICE_FEATURES && s.id === 'audio'));
 
 	$: allSettings = baseSettings.filter(
 		(tab) => !tab.featureFlag || ($config?.features?.[tab.featureFlag] ?? true)
