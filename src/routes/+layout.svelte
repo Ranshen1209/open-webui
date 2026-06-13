@@ -1187,7 +1187,7 @@
 {/if}
 
 {#if loaded}
-	{#if showLanding}
+	{#if showLanding && $page.url.pathname === '/'}
 		<OnBoarding
 			show={true}
 			prominent={true}
