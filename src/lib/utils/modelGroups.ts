@@ -10,6 +10,9 @@ export interface ModelGroup {
 /** Default group name for this deployment (exact-name match). Change the default group here. */
 export const DEFAULT_MODEL_GROUP_NAME = 'GPT-Pro';
 
+/** Preferred default model within the resolved group (matched by clean display name). */
+export const DEFAULT_MODEL_NAME = 'gpt-5.5';
+
 const STORAGE_KEY = 'sakrylle-web.selected-model-group';
 
 /** Derive deduped groups from selector items, sorted by name asc. Models without a group are ignored. */
@@ -49,21 +52,31 @@ export function formatGroupLabel(group: ModelGroup): string {
 
 /**
  * Pick the default model id so it agrees with the group the dropdown will resolve to.
- * Mirrors `resolveSelectedGroupId` (saved > default-named > first), then returns the first
- * model in that group — instead of the first model overall, which may live in another group.
- * Falls back to the first model id when no group metadata is present.
+ * Mirrors `resolveSelectedGroupId` (saved > default-named > first) to choose the group,
+ * then prefers the model whose clean display name matches `preferredName` within that group
+ * (the id may carry a `<group_id>:` routing prefix, so match on name/id-suffix, not the raw id),
+ * falling back to the first model in the group. Falls back to the first model id overall when
+ * no group metadata is present.
  */
 export function resolveDefaultModelId(
-	models: Array<{ id: string; group?: { id?: number } | null }>,
+	models: Array<{ id: string; name?: string; group?: { id?: number } | null }>,
 	savedId: number | null,
-	defaultName: string
+	defaultName: string,
+	preferredName?: string
 ): string | undefined {
 	if (!models?.length) return undefined;
 	const groups = deriveGroups(models.map((m) => ({ model: m })));
 	const groupId = resolveSelectedGroupId(groups, savedId, defaultName);
 	if (groupId === undefined) return models[0]?.id;
-	const inGroup = models.find((m) => m?.group?.id === groupId);
-	return (inGroup ?? models[0])?.id;
+	const inGroup = models.filter((m) => m?.group?.id === groupId);
+	if (!inGroup.length) return models[0]?.id;
+	if (preferredName) {
+		const preferred = inGroup.find(
+			(m) => m.name === preferredName || m.id === preferredName || m.id.endsWith(`:${preferredName}`)
+		);
+		if (preferred) return preferred.id;
+	}
+	return inGroup[0]?.id;
 }
 
 export function getSavedGroupId(): number | null {

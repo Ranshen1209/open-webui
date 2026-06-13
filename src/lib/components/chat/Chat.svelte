@@ -57,7 +57,8 @@
 	import {
 		resolveDefaultModelId,
 		getSavedGroupId,
-		DEFAULT_MODEL_GROUP_NAME
+		DEFAULT_MODEL_GROUP_NAME,
+		DEFAULT_MODEL_NAME
 	} from '$lib/utils/modelGroups';
 
 	import {
@@ -1259,7 +1260,8 @@
 						resolveDefaultModelId(
 							groupModels,
 							getSavedGroupId(),
-							DEFAULT_MODEL_GROUP_NAME
+							DEFAULT_MODEL_GROUP_NAME,
+							DEFAULT_MODEL_NAME
 						) ??
 							availableModels?.at(0) ??
 							''

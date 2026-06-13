@@ -53,35 +53,57 @@ describe('resolveSelectedGroupId', () => {
 });
 
 describe('resolveDefaultModelId', () => {
-	const model = (id: string, groupId?: number, name?: string) => ({
+	// Production shape: clean `name` (display) + `id` carrying the `<group_id>:` prefix.
+	const model = (id: string, groupId?: number, groupName?: string, name?: string) => ({
 		id,
-		...(groupId == null ? {} : { group: { id: groupId, name } })
+		name: name ?? id,
+		...(groupId == null ? {} : { group: { id: groupId, name: groupName } })
 	});
 
-	it('picks the first model belonging to the default-named group, not the first overall', () => {
+	it('prefers the named model within the resolved group over array order', () => {
 		const models = [
 			model('claude-haiku-4-5-20251001', 3, 'Claude-Max'),
-			model('gpt-5.4', 12, 'GPT-Pro'),
-			model('gpt-5.5', 12, 'GPT-Pro')
+			model('14:codex-auto-review', 12, 'GPT-Pro', 'codex-auto-review'),
+			model('14:gpt-5.4', 12, 'GPT-Pro', 'gpt-5.4'),
+			model('14:gpt-5.5', 12, 'GPT-Pro', 'gpt-5.5')
 		];
-		expect(resolveDefaultModelId(models, null, 'GPT-Pro')).toBe('gpt-5.4');
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro', 'gpt-5.5')).toBe('14:gpt-5.5');
+	});
+
+	it('falls back to first-in-group when the preferred model is absent from the group', () => {
+		const models = [
+			model('claude-haiku-4-5-20251001', 3, 'Claude-Max'),
+			model('14:codex-auto-review', 12, 'GPT-Pro', 'codex-auto-review'),
+			model('14:gpt-5.4', 12, 'GPT-Pro', 'gpt-5.4')
+		];
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro', 'gpt-5.5')).toBe('14:codex-auto-review');
+	});
+
+	it('matches the preferred model by clean name even when the id is group-prefixed', () => {
+		const models = [
+			model('14:codex-auto-review', 12, 'GPT-Pro', 'codex-auto-review'),
+			model('14:gpt-5.5', 12, 'GPT-Pro', 'gpt-5.5')
+		];
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro', 'gpt-5.5')).toBe('14:gpt-5.5');
 	});
 
 	it('honors the saved group over the default name', () => {
 		const models = [
 			model('claude-haiku-4-5-20251001', 3, 'Claude-Max'),
-			model('gpt-5.4', 12, 'GPT-Pro')
+			model('14:gpt-5.4', 12, 'GPT-Pro', 'gpt-5.4')
 		];
-		expect(resolveDefaultModelId(models, 3, 'GPT-Pro')).toBe('claude-haiku-4-5-20251001');
+		expect(resolveDefaultModelId(models, 3, 'GPT-Pro', 'gpt-5.5')).toBe('claude-haiku-4-5-20251001');
 	});
 
 	it('falls back to the first model when no group metadata exists', () => {
 		const models = [model('claude-haiku-4-5-20251001'), model('gpt-5.4')];
-		expect(resolveDefaultModelId(models, null, 'GPT-Pro')).toBe('claude-haiku-4-5-20251001');
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro', 'gpt-5.5')).toBe(
+			'claude-haiku-4-5-20251001'
+		);
 	});
 
 	it('returns undefined for an empty model list', () => {
-		expect(resolveDefaultModelId([], null, 'GPT-Pro')).toBeUndefined();
+		expect(resolveDefaultModelId([], null, 'GPT-Pro', 'gpt-5.5')).toBeUndefined();
 	});
 });
 
