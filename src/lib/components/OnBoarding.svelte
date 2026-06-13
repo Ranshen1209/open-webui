@@ -16,6 +16,8 @@
 
 	export let show = true;
 	export let getStartedHandler = () => {};
+	// prominent=true: 渲染醒目登录大按钮(展示页);false: 现有小箭头(首次安装引导)
+	export let prominent = false;
 
 	function setLogoImage() {
 		const logo = document.getElementById('logo');
@@ -73,27 +75,42 @@
 					<Marquee
 						duration={6000}
 						words={[
-							'在樱花轻落的时光里，与你的每一次对话都像春风写下的情书',
-							'让灵感悄然绽放，让思绪温柔相遇'
+							$i18n.t(
+								'In the season of drifting cherry blossoms, every conversation with you reads like a love letter written by the spring breeze'
+							),
+							$i18n.t('Let inspiration quietly bloom, and let thoughts gently meet')
 						]}
 					/>
 				</div>
 
 				<div class="flex justify-center mt-8">
-					<div class="flex flex-col justify-center items-center">
+					{#if prominent}
 						<button
 							aria-label={$i18n.t('Get started')}
-							class="relative z-20 flex p-1 rounded-full bg-white/5 hover:bg-white/10 transition font-medium text-sm"
+							class="relative z-20 flex items-center justify-center gap-2 w-full max-w-xs sm:w-auto sm:max-w-none px-8 py-3 rounded-full bg-accent-500 hover:bg-accent-400 text-accent-950 transition font-medium text-base shadow-lg"
 							on:click={() => {
 								getStartedHandler();
 							}}
 						>
-							<ArrowRightCircle className="size-6" aria-hidden="true" />
+							<span class="font-primary">{$i18n.t(`Get started`)}</span>
+							<ArrowRightCircle className="size-5" aria-hidden="true" />
 						</button>
-						<div class="mt-1.5 font-primary text-base font-medium" aria-hidden="true">
-							{$i18n.t(`Get started`)}
+					{:else}
+						<div class="flex flex-col justify-center items-center">
+							<button
+								aria-label={$i18n.t('Get started')}
+								class="relative z-20 flex p-1 rounded-full bg-white/5 hover:bg-white/10 transition font-medium text-sm"
+								on:click={() => {
+									getStartedHandler();
+								}}
+							>
+								<ArrowRightCircle className="size-6" aria-hidden="true" />
+							</button>
+							<div class="mt-1.5 font-primary text-base font-medium" aria-hidden="true">
+								{$i18n.t(`Get started`)}
+							</div>
 						</div>
-					</div>
+					{/if}
 				</div>
 			</div>
 		</div>
