@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { deriveGroups, resolveSelectedGroupId, formatGroupLabel, getSavedGroupId, saveGroupId } from './modelGroups';
+import {
+	deriveGroups,
+	resolveSelectedGroupId,
+	resolveDefaultModelId,
+	formatGroupLabel,
+	getSavedGroupId,
+	saveGroupId
+} from './modelGroups';
 
 const item = (groupId?: number, name?: string, rate?: number) => ({
 	model: groupId == null ? {} : { group: { id: groupId, name, rate_multiplier: rate } }
@@ -42,6 +49,39 @@ describe('resolveSelectedGroupId', () => {
 
 	it('returns undefined for empty groups', () => {
 		expect(resolveSelectedGroupId([], 1, 'GPT-Pro')).toBeUndefined();
+	});
+});
+
+describe('resolveDefaultModelId', () => {
+	const model = (id: string, groupId?: number, name?: string) => ({
+		id,
+		...(groupId == null ? {} : { group: { id: groupId, name } })
+	});
+
+	it('picks the first model belonging to the default-named group, not the first overall', () => {
+		const models = [
+			model('claude-haiku-4-5-20251001', 3, 'Claude-Max'),
+			model('gpt-5.4', 12, 'GPT-Pro'),
+			model('gpt-5.5', 12, 'GPT-Pro')
+		];
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro')).toBe('gpt-5.4');
+	});
+
+	it('honors the saved group over the default name', () => {
+		const models = [
+			model('claude-haiku-4-5-20251001', 3, 'Claude-Max'),
+			model('gpt-5.4', 12, 'GPT-Pro')
+		];
+		expect(resolveDefaultModelId(models, 3, 'GPT-Pro')).toBe('claude-haiku-4-5-20251001');
+	});
+
+	it('falls back to the first model when no group metadata exists', () => {
+		const models = [model('claude-haiku-4-5-20251001'), model('gpt-5.4')];
+		expect(resolveDefaultModelId(models, null, 'GPT-Pro')).toBe('claude-haiku-4-5-20251001');
+	});
+
+	it('returns undefined for an empty model list', () => {
+		expect(resolveDefaultModelId([], null, 'GPT-Pro')).toBeUndefined();
 	});
 });
 

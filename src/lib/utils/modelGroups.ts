@@ -47,6 +47,25 @@ export function formatGroupLabel(group: ModelGroup): string {
 	return group.rate_multiplier != null ? `${group.name} ·${group.rate_multiplier}x` : group.name;
 }
 
+/**
+ * Pick the default model id so it agrees with the group the dropdown will resolve to.
+ * Mirrors `resolveSelectedGroupId` (saved > default-named > first), then returns the first
+ * model in that group — instead of the first model overall, which may live in another group.
+ * Falls back to the first model id when no group metadata is present.
+ */
+export function resolveDefaultModelId(
+	models: Array<{ id: string; group?: { id?: number } | null }>,
+	savedId: number | null,
+	defaultName: string
+): string | undefined {
+	if (!models?.length) return undefined;
+	const groups = deriveGroups(models.map((m) => ({ model: m })));
+	const groupId = resolveSelectedGroupId(groups, savedId, defaultName);
+	if (groupId === undefined) return models[0]?.id;
+	const inGroup = models.find((m) => m?.group?.id === groupId);
+	return (inGroup ?? models[0])?.id;
+}
+
 export function getSavedGroupId(): number | null {
 	try {
 		const v = localStorage.getItem(STORAGE_KEY);

@@ -55,6 +55,12 @@
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
 
 	import {
+		resolveDefaultModelId,
+		getSavedGroupId,
+		DEFAULT_MODEL_GROUP_NAME
+	} from '$lib/utils/modelGroups';
+
+	import {
 		convertMessagesToHistory,
 		copyToClipboard,
 		getMessageContentParts,
@@ -1245,8 +1251,19 @@
 					selectedModels.length === 0 ||
 					(selectedModels.length === 1 && selectedModels[0] === '')
 				) {
-					// Only fall back to first available model if default models didn't resolve
-					selectedModels = [availableModels?.at(0) ?? ''];
+					// Fall back to the first model in the resolved default group (mirrors the
+					// ModelSelector group chip) so the navbar model matches the shown group,
+					// instead of the first model overall which may live in another group.
+					const groupModels = $models.filter((m) => !(m?.info?.meta?.hidden ?? false));
+					selectedModels = [
+						resolveDefaultModelId(
+							groupModels,
+							getSavedGroupId(),
+							DEFAULT_MODEL_GROUP_NAME
+						) ??
+							availableModels?.at(0) ??
+							''
+					];
 				}
 			} else {
 				selectedModels = [''];
