@@ -131,49 +131,59 @@ git commit -m "refactor(onboarding): add prominent prop and i18n marquee copy"
 
 ---
 
-## Task 2: i18n locale — 新增/调整翻译
+## Task 2: i18n locale — 新增/调整翻译(手动、最小改动)
+
+> **注意(2026-06-13 修订):** 原计划用 `npm run i18n:parse`,但实测它会对全部 62
+> 个 locale 文件做一次仓库级重排/裁剪(删除约 1739 行已废弃 key),与本功能无关,会
+> 污染 feature 提交且增加合并风险。已核实被裁剪的都是源码里**无 `t()` 引用**的死
+> key,裁剪本身没错,但不应混进本提交。故改为**手动**只加两条新 key + 改一个值。
+> i18n 配置 `returnEmptyString: false` + `fallbackLng` → 缺失 key 回退到英文原文,
+> 所以正确性只需要 zh-CN 有翻译;en-US 按约定补空值(`""`)以保持文件整洁。
 
 **Files:**
 - Modify: `src/lib/i18n/locales/zh-CN/translation.json`
-- Modify (自动生成): 各 `src/lib/i18n/locales/*/translation.json`(由 `i18n:parse` 写入新 key)
+- Modify: `src/lib/i18n/locales/en-US/translation.json`
+- **不**运行 `npm run i18n:parse`,**不**改动其它 locale 文件。
 
-- [ ] **Step 1: 提取新 i18n key**
+- [ ] **Step 1: 在 en-US 按字母序插入两条新 key(空值,符合 en-US 约定)**
 
-Run: `npm run i18n:parse`
-Expected: 命令成功;Task 1 新增的两句英文 key 被写入所有 `translation.json`(默认空字符串值,回退到英文 key 文本)。
+en-US 的值统一为 `""`(源即 key)。在 `src/lib/i18n/locales/en-US/translation.json`
+里把这两条插到正确的字母序位置(`I...` 段、`L...` 段):
 
-- [ ] **Step 2: 设置 zh-CN 的 Marquee 翻译**
+```json
+	"In the season of drifting cherry blossoms, every conversation with you reads like a love letter written by the spring breeze": "",
+```
+```json
+	"Let inspiration quietly bloom, and let thoughts gently meet": "",
+```
 
-在 `src/lib/i18n/locales/zh-CN/translation.json` 中,将 `i18n:parse` 写入的这两条空值 key 填上中文(保留原文案,含全角逗号「，」):
+- [ ] **Step 2: 在 zh-CN 按字母序插入两条新 key(中文值,保留全角逗号「，」)**
+
+在 `src/lib/i18n/locales/zh-CN/translation.json` 对应字母序位置插入:
 
 ```json
 	"In the season of drifting cherry blossoms, every conversation with you reads like a love letter written by the spring breeze": "在樱花轻落的时光里，与你的每一次对话都像春风写下的情书",
+```
+```json
 	"Let inspiration quietly bloom, and let thoughts gently meet": "让灵感悄然绽放，让思绪温柔相遇",
 ```
 
 - [ ] **Step 3: 调整 zh-CN 「Get started」文案**
 
-在 `src/lib/i18n/locales/zh-CN/translation.json`(约 1060 行)把:
-
-```json
-	"Get started": "开始使用",
-```
-
-改为:
-
-```json
-	"Get started": "开始体验",
-```
+在 `src/lib/i18n/locales/zh-CN/translation.json` 找到 `"Get started"` 一行,把值
+由 `"开始使用"` 改为 `"开始体验"`(只改这一个 key 的值,别动其它 key)。
 
 - [ ] **Step 4: JSON 合法性 + 类型检查**
 
-Run: `npx prettier --check "src/lib/i18n/locales/zh-CN/translation.json"` 然后 `npm run check`
-Expected: prettier 通过(如失败则先 `npx prettier --write` 同一文件再继续);`npm run check` 无新增 error。
+Run: `npx prettier --check "src/lib/i18n/locales/zh-CN/translation.json" "src/lib/i18n/locales/en-US/translation.json"` 然后 `npm run check`
+Expected: prettier 通过(如失败则先 `npx prettier --write` 同两文件再继续);
+`npm run check` 无新增 error。两文件相对上一个 commit **只应有 3 处新增 + 1 处值修改**,
+不应出现成片删除。
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/lib/i18n/locales
+git add src/lib/i18n/locales/zh-CN/translation.json src/lib/i18n/locales/en-US/translation.json
 git commit -m "i18n: add landing marquee copy, set zh-CN Get started to 开始体验"
 ```
 
