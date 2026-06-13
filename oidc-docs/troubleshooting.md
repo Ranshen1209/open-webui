@@ -118,6 +118,16 @@ If the chat "+" / message-input web-search toggle is absent, or searches return 
 - Restart the container after enabling. Because the flag is read from `/api/config`, an open session only needs a page refresh for the toggle to appear — no re-login (the JWT is unaffected). Re-login is only required when `OAUTH_SCOPES` changes, since that alters token contents.
 - No results from a working setup usually means egress/rate-limit: DuckDuckGo (`ddgs`) honors `HTTPS_PROXY`/`HTTP_PROXY` from the environment; a `RatelimitException` is caught and returns an empty list (logged at error level).
 
+## Non-admin users see no models (admin sees them)
+
+If the model selector shows "未找到结果" / "No results found" for a regular user but the admin account sees the full list and the group dropdown:
+
+- This is **not** a gateway or OAuth-scope problem. Models are fetched live per-user from the gateway (`auth_type=system_oauth` forwards each user's own OAuth token; `ENABLE_BASE_MODELS_CACHE` defaults `False`, so `/api/models` refetches per request), so the gateway already returns exactly the groups/models that user may use.
+- The culprit is Open WebUI's own access-control layer: `get_filtered_models()` in `backend/open_webui/utils/models.py` hides any model that has **no DB `info` entry** from non-admins (the `elif user.role == 'admin'` branch — only admins see "unconfigured" models). Admins bypass filtering entirely because `BYPASS_ADMIN_ACCESS_CONTROL` defaults `True`. Live gateway models never have a DB entry, so non-admins get an empty list while admins get everything.
+- Fix: set `BYPASS_MODEL_ACCESS_CONTROL=True` in the server `.env` and recreate the container. Each user then sees exactly their own gateway-returned models; the gateway remains the sole authority for access + billing (enforced by the `<group_id>:` model-id prefix at chat time). Deployed 2026-06-13.
+- Verify: `docker exec sakrylle-web env | grep BYPASS_MODEL_ACCESS_CONTROL`. Users only need a page refresh, no re-login (the JWT is unaffected).
+- Caveat: this flag also makes any DB-backed workspace model skip Open WebUI's access control. Fine for the all-models-from-gateway setup; revisit if you ever rely on Open WebUI's own per-group model grants.
+
 ## Branding drift
 
 If favicon, splash, PWA icon, or manifest still show Open WebUI:
