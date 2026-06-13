@@ -68,6 +68,7 @@
 
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
+	import OnBoarding from '$lib/components/OnBoarding.svelte';
 	import SyncStatsModal from '$lib/components/chat/Settings/SyncStatsModal.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import { getUserSettings } from '$lib/apis/users';
@@ -101,6 +102,7 @@
 	const bc = new BroadcastChannel('active-tab-channel');
 
 	let loaded = false;
+	let showLanding = false;
 	let tokenTimer = null;
 
 	let showRefresh = false;
@@ -1094,7 +1096,10 @@
 				} else {
 					// Don't redirect if we're already on the auth page
 					// Needed because we pass in tokens from OAuth logins via URL fragments
-					if ($page.url.pathname !== '/auth') {
+					if ($page.url.pathname === '/') {
+						// 登出访客访问根路径:就地展示 landing,保持 URL 为 '/'
+						showLanding = true;
+					} else if ($page.url.pathname !== '/auth') {
 						await goto(`/auth?redirect=${encodedUrl}`);
 					}
 				}
@@ -1182,7 +1187,13 @@
 {/if}
 
 {#if loaded}
-	{#if $isApp}
+	{#if showLanding}
+		<OnBoarding
+			show={true}
+			prominent={true}
+			getStartedHandler={() => goto('/auth?redirect=%2F')}
+		/>
+	{:else if $isApp}
 		<div class="flex flex-row h-screen">
 			<AppSidebar />
 
