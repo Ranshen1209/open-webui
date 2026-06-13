@@ -96,6 +96,17 @@ If upstream logout does not happen:
 
 If discovery is temporarily unavailable, local logout should still complete and fall back to `WEBUI_AUTH_SIGNOUT_REDIRECT_URL` or `/auth`.
 
+## File upload missing from the chat "+" menu
+
+If the chat input "+" menu only shows Capture/screenshot and no "Upload Files" / attach options:
+
+- Confirm `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True` is present in the server `.env`. All upload items gate on `features.enable_retrieval`, which maps to this flag; Capture is the only ungated item, so it is all that survives when the flag is off.
+- The server compose (`/opt/stack/docker-compose.yml`) loads `sakrylle-web` via `env_file` only (no `environment:` block), so the flag MUST live in `.env` to reach the container. The repo `deploy/docker-compose.sakrylle-web.yml` sets it in `environment:`, but that file is not what the server runs.
+- Verify it reached the container: `docker exec sakrylle-web env | grep SAKRYLLE_ENABLE_RETRIEVAL_ROUTER`, and that `/api/v1/retrieval/` returns a non-404 status (the router only registers when the flag is true).
+- `features.enable_retrieval` in `/api/config` is only returned to authenticated requests, so an unauthenticated `curl` shows it absent even when the flag is on — verify via the env var and route instead.
+- Even with the flag on, a user also needs `chat.file_upload` permission and a model that supports file upload for the items to render.
+- Defaults stay lightweight: `BYPASS_EMBEDDING_AND_RETRIEVAL=True` and `VECTOR_DB=''` (NoOp) mean full-context injection with no embeddings — no chromadb/torch load on the slim image. Restart the container and have users re-login after enabling.
+
 ## Branding drift
 
 If favicon, splash, PWA icon, or manifest still show Open WebUI:
