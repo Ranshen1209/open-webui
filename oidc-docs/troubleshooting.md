@@ -107,6 +107,17 @@ If the chat input "+" menu only shows Capture/screenshot and no "Upload Files" /
 - Even with the flag on, a user also needs `chat.file_upload` permission and a model that supports file upload for the items to render.
 - Defaults stay lightweight: `BYPASS_EMBEDDING_AND_RETRIEVAL=True` and `VECTOR_DB=''` (NoOp) mean full-context injection with no embeddings — no chromadb/torch load on the slim image. Restart the container and have users re-login after enabling.
 
+## Web search missing or returning no results
+
+If the chat "+" / message-input web-search toggle is absent, or searches return nothing:
+
+- Web search rides on the retrieval router, so `SAKRYLLE_ENABLE_RETRIEVAL_ROUTER=True` must be set first — the whole `/api/v1/retrieval/process/web/search` endpoint only registers when it is. Then `ENABLE_WEB_SEARCH=True` and `WEB_SEARCH_ENGINE=duckduckgo` (no API key needed) turn the feature on.
+- Set `BYPASS_WEB_SEARCH_EMBEDDING_AND_RETRIEVAL=True` so fetched page content is injected straight into context with no embedding/vector DB — this keeps it safe on the slim image (no chromadb/torch). The full chain (DuckDuckGo search + web-loader page fetch) was verified end-to-end on the slim image 2026-06-13.
+- All three keys MUST live in the server `.env` (compose uses `env_file` only). Verify they reached the container: `docker exec sakrylle-web env | grep -E 'ENABLE_WEB_SEARCH|WEB_SEARCH_ENGINE|BYPASS_WEB_SEARCH'`.
+- `features.enable_web_search` in `/api/config` is only returned to authenticated requests (like `enable_retrieval`), so an unauthenticated `curl` shows it absent even when on — check the env var instead.
+- Restart the container after enabling. Because the flag is read from `/api/config`, an open session only needs a page refresh for the toggle to appear — no re-login (the JWT is unaffected). Re-login is only required when `OAUTH_SCOPES` changes, since that alters token contents.
+- No results from a working setup usually means egress/rate-limit: DuckDuckGo (`ddgs`) honors `HTTPS_PROXY`/`HTTP_PROXY` from the environment; a `RatelimitException` is caught and returns an empty list (logged at error level).
+
 ## Branding drift
 
 If favicon, splash, PWA icon, or manifest still show Open WebUI:
