@@ -34,8 +34,8 @@
 	// Sakrylle auth background — theme-aware (dark / light)
 	const authBgImage =
 		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.png`
-			: `${WEBUI_BASE_URL}/assets/images/sakura-light.png`;
+			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.webp`
+			: `${WEBUI_BASE_URL}/assets/images/sakura-light.webp`;
 
 	let mode = $config?.features.enable_ldap ? 'ldap' : 'signin';
 

@@ -11,8 +11,8 @@
 	// Sakrylle onboarding background — theme-aware (dark / light)
 	const bgImage =
 		typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.png`
-			: `${WEBUI_BASE_URL}/assets/images/sakura-light.png`;
+			? `${WEBUI_BASE_URL}/assets/images/sakura-dark.webp`
+			: `${WEBUI_BASE_URL}/assets/images/sakura-light.webp`;
 
 	export let show = true;
 	export let getStartedHandler = () => {};
@@ -47,7 +47,7 @@
 </script>
 
 {#if show}
-	<div class="w-full h-screen max-h-[100dvh] text-white relative">
+	<div class="w-full h-screen max-h-[100dvh] text-white relative bg-[#181016]">
 		<div class="fixed m-10 z-50">
 			<div class="flex space-x-2">
 				<div class=" self-center">
@@ -63,15 +63,13 @@
 
 		<SlideShow duration={5000} imageUrls={[bgImage]} />
 
-		<div
-			class="w-full h-full absolute top-0 left-0 bg-linear-to-t from-20% from-black to-transparent"
-		></div>
-
-		<div class="w-full h-full absolute top-0 left-0 backdrop-blur-xs bg-black/50"></div>
+		<div class="w-full h-full absolute top-0 left-0 backdrop-blur-xs bg-black/40"></div>
 
 		<div class="relative bg-transparent w-full h-screen max-h-[100dvh] flex z-10">
-			<div class="flex flex-col justify-end w-full items-center pb-10 text-center">
-				<div class="text-2xl lg:text-4xl font-secondary leading-relaxed max-w-4xl px-6">
+			<div class="flex flex-col justify-center w-full items-center text-center">
+				<div
+					class="text-2xl lg:text-4xl font-secondary leading-relaxed max-w-4xl px-6 [text-shadow:0_2px_12px_rgba(0,0,0,0.65)]"
+				>
 					<Marquee
 						duration={6000}
 						words={[
