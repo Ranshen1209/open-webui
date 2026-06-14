@@ -457,6 +457,7 @@ from open_webui.env import (
     SAFE_MODE,
     SAKRYLLE_ENABLE_OLLAMA_ROUTER,
     SAKRYLLE_ENABLE_RETRIEVAL_ROUTER,
+    SAKRYLLE_PURCHASE_URL,
     SCIM_TOKEN,
     VERSION,
     # Admin Account Runtime Creation
@@ -2433,6 +2434,7 @@ async def get_app_config(request: Request):
         'name': app.state.WEBUI_NAME,
         'version': VERSION,
         'default_locale': str(DEFAULT_LOCALE),
+        'purchase_url': SAKRYLLE_PURCHASE_URL,
         'oauth': {
             'providers': {name: config.get('name', name) for name, config in OAUTH_PROVIDERS.items()},
             'auto_redirect': app.state.config.OAUTH_AUTO_REDIRECT,
