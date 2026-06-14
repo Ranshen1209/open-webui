@@ -55,6 +55,7 @@
 
 	import ArchivedChatsModal from './ArchivedChatsModal.svelte';
 	import UserMenu from './Sidebar/UserMenu.svelte';
+	import AccountBalance from './Sidebar/AccountBalance.svelte';
 	import ChatItem from './Sidebar/ChatItem.svelte';
 	import Spinner from '../common/Spinner.svelte';
 	import Loader from '../common/Loader.svelte';
@@ -936,6 +937,11 @@
 
 		<div>
 			<div>
+				{#if $user !== undefined && $user !== null}
+					<div class="pt-2 flex justify-center items-center">
+						<AccountBalance collapsed />
+					</div>
+				{/if}
 				<div class=" py-2 flex justify-center items-center">
 					{#if $user !== undefined && $user !== null}
 						<UserMenu
@@ -1599,6 +1605,7 @@
 				></div>
 				<div class="flex flex-col font-primary">
 					{#if $user !== undefined && $user !== null}
+						<AccountBalance />
 						<UserMenu
 							role={$user?.role}
 							profile={$config?.features?.enable_user_status ?? true}
