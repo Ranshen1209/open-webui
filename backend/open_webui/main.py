@@ -481,6 +481,7 @@ from open_webui.models.messages import Messages
 from open_webui.models.models import Models
 from open_webui.models.users import UserModel, Users
 from open_webui.routers import (
+    account,
     analytics,
     audio,
     auths,
@@ -1440,6 +1441,7 @@ app.mount('/ws', socket_app)
 
 if SAKRYLLE_ENABLE_OLLAMA_ROUTER:
     app.include_router(ollama.router, prefix='/ollama', tags=['ollama'])
+app.include_router(account.router, prefix='/api/v1/account', tags=['account'])
 app.include_router(openai.router, prefix='/openai', tags=['openai'])
 
 
