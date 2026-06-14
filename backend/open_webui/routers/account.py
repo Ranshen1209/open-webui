@@ -15,9 +15,6 @@ router = APIRouter()
 GATEWAY_IDX = 0
 BALANCE_FETCH_TIMEOUT = 10
 
-UNAVAILABLE = {'available': False}
-
-
 def normalize_balance(data) -> dict:
     """Map a gateway /v1/account/balance response to the frontend shape.
 
@@ -45,7 +42,7 @@ async def get_account_balance(request: Request, user=Depends(get_verified_user))
     """
     base_urls = request.app.state.config.OPENAI_API_BASE_URLS
     if not base_urls or GATEWAY_IDX >= len(base_urls):
-        return UNAVAILABLE
+        return {'available': False}
 
     url = base_urls[GATEWAY_IDX]
     keys = request.app.state.config.OPENAI_API_KEYS
@@ -71,10 +68,10 @@ async def get_account_balance(request: Request, user=Depends(get_verified_user))
             ) as r:
                 if r.status != 200:
                     log.debug(f'Balance fetch returned HTTP {r.status}')
-                    return UNAVAILABLE
+                    return {'available': False}
                 data = await r.json()
     except Exception as e:
         log.debug(f'Balance fetch failed: {e}')
-        return UNAVAILABLE
+        return {'available': False}
 
     return normalize_balance(data)
