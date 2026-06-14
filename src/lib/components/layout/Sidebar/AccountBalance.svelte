@@ -21,27 +21,21 @@
 		? formatBalance(balance?.credit_remaining, balance?.currency_symbol)
 		: '';
 
-	const token = () => localStorage.token;
-
 	const refresh = async () => {
 		if (!$user) {
 			balance = null;
 			return;
 		}
-		balance = await getAccountBalance(token());
-	};
-
-	const onFocus = () => {
-		refresh();
+		balance = await getAccountBalance(localStorage.token);
 	};
 
 	onMount(() => {
 		refresh();
-		window.addEventListener('focus', onFocus);
+		window.addEventListener('focus', refresh);
 	});
 
 	onDestroy(() => {
-		window.removeEventListener('focus', onFocus);
+		window.removeEventListener('focus', refresh);
 	});
 </script>
 
@@ -62,7 +56,7 @@
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
 					stroke="currentColor"
-					class="size-5"
+					class="size-4.5"
 				>
 					<path
 						stroke-linecap="round"
