@@ -138,6 +138,23 @@ If favicon, splash, PWA icon, or manifest still show Open WebUI:
 - Check `/static/favicon.svg`, `/static/favicon.png`, `/static/splash.png`, `/static/splash-dark.png`, `/static/logo.png`, and PWA icons.
 - Clear browser/PWA cache or uninstall and reinstall the PWA after icon changes.
 
+## Balance not showing in the sidebar
+
+The sidebar balance + 充值 widget calls `GET /api/v1/account/balance`, which proxies
+the user's OAuth token to the gateway `GET /v1/account/balance`. The widget hides
+itself (no error) whenever the gateway does not return a balance. Checklist:
+
+- **Scope:** `OAUTH_SCOPES` in the server `.env` must include `account:balance:read`
+  (the gateway gates `/v1/account/balance` on it — see the center doc
+  `rp-integration-guide.md` §10.2/§12). After adding it, **restart the container and
+  have users re-login** — old tokens lack the scope.
+- **Connection:** balance is read from the `idx 0` OpenAI connection
+  (`OPENAI_API_CONFIGS["0"]` with `auth_type=system_oauth`). If that connection is
+  missing or misconfigured, balance is unavailable.
+- **Purchase URL:** the 充值 button uses `SAKRYLLE_PURCHASE_URL` (exposed at
+  `/api/config` as `purchase_url`), default `https://sub.sakrylle.com/purchase`.
+- Verify the route exists: `curl -s -o /dev/null -w "%{http_code}" https://chat.sakrylle.com/api/v1/account/balance` returns `401` unauthenticated (route present), not `404`.
+
 ## Canonical references
 
 - [OIDC current state](../../sub2api/sakrylle-docs/10-platform-identity/current-state.md)
