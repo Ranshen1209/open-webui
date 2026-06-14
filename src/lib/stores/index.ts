@@ -281,6 +281,7 @@ type Config = {
 	name: string;
 	version: string;
 	default_locale: string;
+	purchase_url?: string;
 	default_models: string;
 	default_prompt_suggestions: PromptSuggestion[];
 	features: {
