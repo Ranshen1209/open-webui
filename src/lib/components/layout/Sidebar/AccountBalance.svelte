@@ -67,9 +67,7 @@
 			</a>
 		</Tooltip>
 	{:else}
-		<div
-			class="flex items-center justify-between gap-2 rounded-2xl py-1.5 px-3 mb-1 text-sm"
-		>
+		<div class="flex items-center justify-between gap-2 rounded-2xl py-1.5 px-3 mb-1 text-sm">
 			<span class="text-gray-600 dark:text-gray-400 truncate">
 				{$i18n.t('Balance')}
 				<span class="font-medium text-gray-900 dark:text-gray-100">{amountText}</span>
