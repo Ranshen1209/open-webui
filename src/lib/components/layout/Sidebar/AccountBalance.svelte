@@ -15,7 +15,7 @@
 		currency_symbol?: string;
 	} | null = null;
 
-	$: purchaseUrl = $config?.purchase_url ?? 'https://sub.sakrylle.com/purchase';
+	$: purchaseUrl = $config?.purchase_url ?? 'https://ai1.sakrylle.com/purchase';
 	$: available = balance?.available === true;
 	$: amountText = available
 		? formatBalance(balance?.credit_remaining, balance?.currency_symbol)

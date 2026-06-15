@@ -33,7 +33,7 @@ Minimum required values:
 - `WEBUI_SECRET_KEY=<strong secret>`
 - `OAUTH_CLIENT_ID=sakrylle-web`
 - `OAUTH_CLIENT_SECRET=<confidential client secret>`
-- `OPENID_PROVIDER_URL=https://sub.sakrylle.com/.well-known/openid-configuration`
+- `OPENID_PROVIDER_URL=https://oidc1.sakrylle.com/.well-known/openid-configuration`
 - `OPENID_REDIRECT_URI=https://chat.sakrylle.com/oauth/oidc/login/callback`
 - `OAUTH_PROVIDER_NAME=Sakrylle SSO`
 - `OAUTH_SCOPES=openid email profile models:read chat.completions:create responses:create messages:create usage:read offline_access`
@@ -58,7 +58,7 @@ Recommended production values:
 
 Optional value:
 
-- `OPENID_END_SESSION_ENDPOINT=https://sub.sakrylle.com/oauth/logout` only if discovery does not expose the logout endpoint or deployment wants an explicit override.
+- `OPENID_END_SESSION_ENDPOINT=https://oidc1.sakrylle.com/oauth/logout` only if discovery does not expose the logout endpoint or deployment wants an explicit override.
 
 ## Client registration expectations
 

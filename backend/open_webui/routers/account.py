@@ -15,6 +15,31 @@ router = APIRouter()
 GATEWAY_IDX = 0
 BALANCE_FETCH_TIMEOUT = 10
 
+# Map ISO currency codes (the gateway's `currency_display`) to display symbols.
+# The gateway's /account/balance returns `currency_display` (e.g. "CNY") but no
+# `currency_symbol`, so derive a symbol here for the sidebar widget. Unknown codes
+# fall back to the code itself (better than silently mislabelling as the default).
+CURRENCY_SYMBOLS = {
+    'CNY': '¥',
+    'JPY': '¥',
+    'USD': '$',
+    'EUR': '€',
+    'GBP': '£',
+    'HKD': 'HK$',
+}
+
+
+def resolve_currency_symbol(data) -> str | None:
+    """Prefer an explicit gateway symbol, else map the ISO code, else None."""
+    symbol = data.get('currency_symbol')
+    if symbol:
+        return symbol
+    display = data.get('currency_display')
+    if not display:
+        return None
+    return CURRENCY_SYMBOLS.get(str(display).upper(), str(display))
+
+
 def normalize_balance(data) -> dict:
     """Map a gateway /v1/account/balance response to the frontend shape.
 
@@ -25,7 +50,7 @@ def normalize_balance(data) -> dict:
     return {
         'available': True,
         'credit_remaining': data.get('credit_remaining'),
-        'currency_symbol': data.get('currency_symbol'),
+        'currency_symbol': resolve_currency_symbol(data),
         'currency_display': data.get('currency_display'),
         'group_name': data.get('group_name'),
         'rate_multiplier': data.get('rate_multiplier'),

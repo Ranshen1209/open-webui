@@ -90,7 +90,7 @@ The Web signout route clears local auth state first, deletes the stored OAuth se
 
 If upstream logout does not happen:
 
-- Confirm discovery contains `end_session_endpoint`, or set `OPENID_END_SESSION_ENDPOINT=https://sub.sakrylle.com/oauth/logout` explicitly.
+- Confirm discovery contains `end_session_endpoint`, or set `OPENID_END_SESSION_ENDPOINT=https://oidc1.sakrylle.com/oauth/logout` explicitly.
 - Confirm `WEBUI_AUTH_SIGNOUT_REDIRECT_URL` is allowlisted by the IdP when required.
 - Confirm the browser is navigating to the `redirect_url` returned by `/api/v1/auths/signout`.
 
@@ -152,7 +152,7 @@ itself (no error) whenever the gateway does not return a balance. Checklist:
   (`OPENAI_API_CONFIGS["0"]` with `auth_type=system_oauth`). If that connection is
   missing or misconfigured, balance is unavailable.
 - **Purchase URL:** the 充值 button uses `SAKRYLLE_PURCHASE_URL` (exposed at
-  `/api/config` as `purchase_url`), default `https://sub.sakrylle.com/purchase`.
+  `/api/config` as `purchase_url`), default `https://ai1.sakrylle.com/purchase`.
 - Verify the route exists: `curl -s -o /dev/null -w "%{http_code}" https://chat.sakrylle.com/api/v1/account/balance` returns `401` unauthenticated (route present), not `404`.
 
 ## Canonical references

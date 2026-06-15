@@ -1085,4 +1085,4 @@ SAKRYLLE_ENABLE_OLLAMA_ROUTER = (
 
 # External purchase / top-up page the sidebar balance widget links to.
 # Defaults to the production Sakrylle billing page; override per-deployment.
-SAKRYLLE_PURCHASE_URL = os.getenv('SAKRYLLE_PURCHASE_URL', 'https://sub.sakrylle.com/purchase')
+SAKRYLLE_PURCHASE_URL = os.getenv('SAKRYLLE_PURCHASE_URL', 'https://ai1.sakrylle.com/purchase')
