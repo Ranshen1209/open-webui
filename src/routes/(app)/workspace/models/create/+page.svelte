@@ -2,7 +2,7 @@
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
 	import { config, models, settings } from '$lib/stores';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	import { onMount, tick, getContext } from 'svelte';
 	import { createNewModel, getModelById } from '$lib/apis/models';

@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition';
 	import DOMPurify from 'dompurify';
 	import { marked } from 'marked';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	const dispatch = createEventDispatcher();
 	const i18n = getContext('i18n');

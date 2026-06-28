@@ -1,4 +1,4 @@
-import { WEBUI_BASE_URL } from '$lib/constants';
+import { WEBUI_BASE_URL } from '$lib/config/app';
 import { convertOpenApiToToolPayload } from '$lib/utils';
 import { getOpenAIModelsDirect } from './openai';
 
@@ -1649,19 +1649,4 @@ export const updateWebhookUrl = async (token: string, url: string) => {
 	return res.url;
 };
 
-export interface ModelConfig {
-	id: string;
-	name: string;
-	meta: ModelMeta;
-	base_model_id?: string;
-	params: ModelParams;
-}
-
-export interface ModelMeta {
-	toolIds: never[];
-	description?: string;
-	capabilities?: object;
-	profile_image_url?: string;
-}
-
-export interface ModelParams {}
+export type { ModelConfig, ModelMeta, ModelParams } from '$lib/types';

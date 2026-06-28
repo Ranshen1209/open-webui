@@ -12,7 +12,7 @@
 		OPENAI_API_BASE_URL,
 		WEBUI_API_BASE_URL,
 		WEBUI_BASE_URL
-	} from '$lib/constants';
+	} from '$lib/config/app';
 	import { WEBUI_NAME, config, user, models, settings } from '$lib/stores';
 
 	import { chatCompletion } from '$lib/apis/openai';

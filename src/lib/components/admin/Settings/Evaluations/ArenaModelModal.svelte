@@ -13,7 +13,7 @@
 	import AccessControl from '$lib/components/workspace/common/AccessControl.svelte';
 	import ConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	export let show = false;
 	export let edit = false;

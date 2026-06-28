@@ -6,7 +6,7 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Hashtag from '$lib/components/icons/Hashtag.svelte';
 	import Lock from '$lib/components/icons/Lock.svelte';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { searchUsers } from '$lib/apis/users';
 
 	export let query = '';

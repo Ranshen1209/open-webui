@@ -24,7 +24,8 @@
 	import { getSessionUser } from '$lib/apis/auths';
 
 	import { uploadFile } from '$lib/apis/files';
-	import { WEBUI_API_BASE_URL, HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
 
 	import { getSuggestionRenderer } from '../common/RichTextInput/suggestions';
 	import CommandSuggestionList from '../chat/MessageInput/CommandSuggestionList.svelte';

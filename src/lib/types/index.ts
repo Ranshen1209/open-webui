@@ -13,3 +13,18 @@ export enum TTS_RESPONSE_SPLIT {
 	PARAGRAPHS = 'paragraphs',
 	NONE = 'none'
 }
+
+export type {
+	Config,
+	DesktopEvent,
+	DesktopEventFile,
+	KnowledgeDocument,
+	Model,
+	ModelConfig,
+	ModelMeta,
+	ModelParams,
+	OllamaModel,
+	OpenAIModel,
+	SessionUser,
+	Settings
+} from './models';

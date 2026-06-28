@@ -51,7 +51,7 @@
 	import { updateUserSettings } from '$lib/apis/users';
 	import { checkActiveChats } from '$lib/apis/tasks';
 	import { createNoteHandler } from '$lib/components/notes/utils';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 
 	import ArchivedChatsModal from './ArchivedChatsModal.svelte';
 	import UserMenu from './Sidebar/UserMenu.svelte';

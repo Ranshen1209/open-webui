@@ -1,5 +1,5 @@
 <script>
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { shortCodesToEmojis } from '$lib/stores';
 
 	export let shortCode;

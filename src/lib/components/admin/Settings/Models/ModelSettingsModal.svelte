@@ -6,7 +6,7 @@
 	const dispatch = createEventDispatcher();
 
 	import { models, config as _config } from '$lib/stores';
-	import { DEFAULT_CAPABILITIES } from '$lib/constants';
+	import { DEFAULT_CAPABILITIES } from '$lib/constants/capabilities';
 	import { deleteAllModels } from '$lib/apis/models';
 	import { getModelsConfig, setModelsConfig, setDefaultPromptSuggestions } from '$lib/apis/configs';
 	import { getBackendConfig } from '$lib/apis';

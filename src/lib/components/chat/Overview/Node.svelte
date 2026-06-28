@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	import { Handle, Position, type NodeProps } from '@xyflow/svelte';
 	import { getContext } from 'svelte';
 

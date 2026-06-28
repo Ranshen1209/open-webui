@@ -1,4 +1,4 @@
-import { WEBUI_API_BASE_URL } from '$lib/constants';
+import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 export const createNewTool = async (token: string, tool: object) => {
 	let error = null;

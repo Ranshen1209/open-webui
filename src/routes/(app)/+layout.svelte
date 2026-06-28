@@ -15,7 +15,7 @@
 	import { getTerminalServers } from '$lib/apis/terminal';
 	import { getUserSettings } from '$lib/apis/users';
 
-	import { WEBUI_VERSION, WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_VERSION } from '$lib/config/app';
 	import { compareVersion } from '$lib/utils';
 
 	import {

@@ -1,4 +1,4 @@
-import { WEBUI_API_BASE_URL } from '$lib/constants';
+import { WEBUI_API_BASE_URL } from '$lib/config/app';
 import { getUserPosition } from '$lib/utils';
 
 export const getUserGroups = async (token: string) => {

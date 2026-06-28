@@ -3,7 +3,7 @@
 	import Bolt from '$lib/components/icons/Bolt.svelte';
 	import { onMount, getContext } from 'svelte';
 	import { settings, WEBUI_NAME } from '$lib/stores';
-	import { WEBUI_VERSION } from '$lib/constants';
+	import { WEBUI_VERSION } from '$lib/config/app';
 
 	const i18n = getContext('i18n');
 

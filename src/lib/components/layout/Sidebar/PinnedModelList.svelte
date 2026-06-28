@@ -4,7 +4,7 @@
 	import { onDestroy, onMount, tick } from 'svelte';
 
 	import { chatId, config, mobile, models, settings, showSidebar } from '$lib/stores';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { updateUserSettings } from '$lib/apis/users';
 	import PinnedModelItem from './PinnedModelItem.svelte';
 

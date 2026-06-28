@@ -12,7 +12,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import { addUserToGroup, removeUserFromGroup } from '$lib/apis/groups';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Checkbox from '$lib/components/common/Checkbox.svelte';

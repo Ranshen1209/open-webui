@@ -7,7 +7,7 @@
 	import { getGravatarUrl } from '$lib/apis/utils';
 	import { canvasPixelTest, generateInitialsImage } from '$lib/utils';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	export let profileImageUrl;
 	export let user = null;

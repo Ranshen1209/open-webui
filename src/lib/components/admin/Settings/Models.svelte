@@ -41,7 +41,7 @@
 	import Eye from '$lib/components/icons/Eye.svelte';
 	import CheckCircle from '$lib/components/icons/CheckCircle.svelte';
 	import Minus from '$lib/components/icons/Minus.svelte';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { goto } from '$app/navigation';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';

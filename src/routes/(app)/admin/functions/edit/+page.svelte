@@ -11,7 +11,7 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import { getModels } from '$lib/apis';
 	import { compareVersion, extractFrontmatter } from '$lib/utils';
-	import { WEBUI_VERSION } from '$lib/constants';
+	import { WEBUI_VERSION } from '$lib/config/app';
 
 	const i18n = getContext('i18n');
 

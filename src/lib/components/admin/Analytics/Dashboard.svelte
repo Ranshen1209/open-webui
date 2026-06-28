@@ -15,7 +15,7 @@
 	import ChartLine from './ChartLine.svelte';
 	import AnalyticsModelModal from './AnalyticsModelModal.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	import { formatNumber } from '$lib/utils';
 	import { PRIMARY_500 } from '$lib/theme/colors';
 	import { goto } from '$app/navigation';

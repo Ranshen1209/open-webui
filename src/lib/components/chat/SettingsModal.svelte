@@ -2,7 +2,7 @@
 	import { getContext, onMount, tick } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { config, models, settings, user } from '$lib/stores';
-	import { HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
 	import { updateUserSettings } from '$lib/apis/users';
 	import { getModels as _getModels } from '$lib/apis';
 	import { goto } from '$app/navigation';

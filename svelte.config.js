@@ -17,6 +17,13 @@ const config = {
 			assets: 'build',
 			fallback: 'index.html'
 		}),
+		alias: {
+			$apis: 'src/lib/apis',
+			$components: 'src/lib/components',
+			$stores: 'src/lib/stores',
+			$types: 'src/lib/types',
+			$utils: 'src/lib/utils'
+		},
 		// poll for new version name every 60 seconds (to trigger reload mechanic in +layout.svelte)
 		version: {
 			name: (() => {

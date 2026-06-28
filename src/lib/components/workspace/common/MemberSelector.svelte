@@ -6,7 +6,7 @@
 
 	import { user as _user } from '$lib/stores';
 	import { getUserInfoById, searchUsers } from '$lib/apis/users';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import Pagination from '$lib/components/common/Pagination.svelte';

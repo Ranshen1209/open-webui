@@ -5,7 +5,7 @@
 
 	import Cog6 from '$lib/components/icons/Cog6.svelte';
 	import ArenaModelModal from './ArenaModelModal.svelte';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	export let model;
 
 	let showModel = false;

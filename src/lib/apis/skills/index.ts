@@ -1,4 +1,4 @@
-import { WEBUI_API_BASE_URL } from '$lib/constants';
+import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 export const createNewSkill = async (token: string, skill: object) => {
 	let error = null;

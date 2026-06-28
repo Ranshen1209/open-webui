@@ -1,4 +1,4 @@
-import { WEBUI_API_BASE_URL } from '$lib/constants';
+import { WEBUI_API_BASE_URL } from '$lib/config/app';
 import { getTimeRange } from '$lib/utils';
 
 type NoteItem = {

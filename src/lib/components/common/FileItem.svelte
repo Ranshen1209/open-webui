@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, getContext } from 'svelte';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import { formatFileSize } from '$lib/utils';
 	import { settings } from '$lib/stores';

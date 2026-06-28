@@ -9,7 +9,7 @@
 
 	import { models, settings, user, terminalServers } from '$lib/stores';
 	import { getTerminalServers } from '$lib/apis/terminal';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import Switch from '$lib/components/common/Switch.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';

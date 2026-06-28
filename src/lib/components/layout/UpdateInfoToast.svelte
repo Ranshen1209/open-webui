@@ -4,7 +4,7 @@
 	const dispatch = createEventDispatcher();
 	const i18n = getContext('i18n');
 
-	import { WEBUI_VERSION } from '$lib/constants';
+	import { WEBUI_VERSION } from '$lib/config/app';
 	import XMark from '../icons/XMark.svelte';
 
 	export let version = {

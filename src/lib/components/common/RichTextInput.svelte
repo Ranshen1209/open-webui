@@ -171,7 +171,7 @@
 	import Mention from '@tiptap/extension-mention';
 	import FormattingButtons from './RichTextInput/FormattingButtons.svelte';
 
-	import { PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants';
+	import { PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants/input';
 	import { createLowlight } from 'lowlight';
 	import hljs from 'highlight.js';
 

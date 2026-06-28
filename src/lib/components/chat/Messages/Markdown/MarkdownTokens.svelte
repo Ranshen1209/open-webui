@@ -9,7 +9,7 @@
 	import { marked, type Token } from 'marked';
 	import { copyToClipboard, unescapeHtml } from '$lib/utils';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { settings } from '$lib/stores';
 
 	import CodeBlock from '$lib/components/chat/Messages/CodeBlock.svelte';

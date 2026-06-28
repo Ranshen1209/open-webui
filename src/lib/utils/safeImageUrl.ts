@@ -1,4 +1,4 @@
-import { WEBUI_BASE_URL } from '$lib/constants';
+import { WEBUI_BASE_URL } from '$lib/config/app';
 
 const PLACEHOLDER_IMAGE = '/favicon.png';
 

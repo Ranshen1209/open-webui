@@ -7,7 +7,7 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import UserMenu from '$lib/components/layout/Sidebar/UserMenu.svelte';
 	import PencilSquare from '../icons/PencilSquare.svelte';

@@ -18,7 +18,7 @@
 	import Skeleton from './Skeleton.svelte';
 	import localizedFormat from 'dayjs/plugin/localizedFormat';
 	import ProfileImage from './ProfileImage.svelte';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import equal from 'fast-deep-equal';
 	const i18n = getContext('i18n');
 	dayjs.extend(localizedFormat);

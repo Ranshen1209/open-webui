@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	import dayjs from 'dayjs';
 	import calendar from 'dayjs/plugin/calendar';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import Loader from '$lib/components/common/Loader.svelte';
 

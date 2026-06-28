@@ -36,7 +36,8 @@
 		removeDetails,
 		removeAllDetails
 	} from '$lib/utils';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
 	import equal from 'fast-deep-equal';
 
 	import Name from './Name.svelte';

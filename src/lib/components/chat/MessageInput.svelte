@@ -20,7 +20,6 @@
 	const dispatch = createEventDispatcher();
 
 	import {
-		type Model,
 		mobile,
 		settings,
 		models,
@@ -37,6 +36,7 @@
 		TTSWorker,
 		temporaryChatEnabled
 	} from '$lib/stores';
+	import type { Model } from '$lib/types';
 
 	import {
 		convertHeicToJpeg,
@@ -61,12 +61,9 @@
 	import { getTools } from '$lib/apis/tools';
 	import { getSkills } from '$lib/apis/skills';
 
-	import {
-		WEBUI_BASE_URL,
-		WEBUI_API_BASE_URL,
-		PASTED_TEXT_CHARACTER_LIMIT,
-		HIDE_VOICE_FEATURES
-	} from '$lib/constants';
+	import { WEBUI_BASE_URL, WEBUI_API_BASE_URL } from '$lib/config/app';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
+	import { PASTED_TEXT_CHARACTER_LIMIT } from '$lib/constants/input';
 	import { getOAuthClientAuthorizationUrl } from '$lib/apis/configs';
 
 	import { createNoteHandler } from '../notes/utils';

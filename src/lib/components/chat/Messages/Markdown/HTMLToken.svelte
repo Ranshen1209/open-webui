@@ -2,7 +2,7 @@
 	import DOMPurify from 'dompurify';
 	import type { Token } from 'marked';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { settings } from '$lib/stores';
 
 	export let id: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { marked } from 'marked';
 	import DOMPurify from 'dompurify';
 

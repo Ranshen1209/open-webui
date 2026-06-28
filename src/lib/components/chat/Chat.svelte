@@ -12,14 +12,15 @@
 
 	import { get, type Unsubscriber, type Writable } from 'svelte/store';
 	import type { i18n as i18nType } from 'i18next';
-	import { WEBUI_BASE_URL, HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
+	import type { Model } from '$lib/types';
 	import equal from 'fast-deep-equal';
 
 	import {
 		chatId,
 		chats,
 		config,
-		type Model,
 		models,
 		tags as allTags,
 		settings,
@@ -52,7 +53,7 @@
 		desktopEvent
 	} from '$lib/stores';
 
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import {
 		resolveDefaultModelId,

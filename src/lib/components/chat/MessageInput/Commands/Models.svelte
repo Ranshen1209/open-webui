@@ -5,7 +5,7 @@
 	import { tick, getContext } from 'svelte';
 
 	import { models } from '$lib/stores';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 
 	const i18n = getContext('i18n');

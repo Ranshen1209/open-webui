@@ -16,7 +16,7 @@
 	import { formatDate } from '$lib/utils';
 
 	import { settings, user, shortCodesToEmojis } from '$lib/stores';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { getMessageData } from '$lib/apis/channels';
 
 	import Markdown from '$lib/components/chat/Messages/Markdown.svelte';

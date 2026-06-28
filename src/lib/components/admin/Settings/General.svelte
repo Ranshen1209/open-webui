@@ -16,7 +16,7 @@
 	import SensitiveInput from '$lib/components/common/SensitiveInput.svelte';
 	import Switch from '$lib/components/common/Switch.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
-	import { WEBUI_BUILD_HASH, WEBUI_VERSION } from '$lib/constants';
+	import { WEBUI_BUILD_HASH, WEBUI_VERSION } from '$lib/config/app';
 	import { banners as _banners, config } from '$lib/stores';
 	import type { Banner } from '$lib/types';
 	import { compareVersion } from '$lib/utils';

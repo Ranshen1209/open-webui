@@ -4,7 +4,7 @@
 	const i18n = getContext('i18n');
 
 	import { user as _user, channels, socket } from '$lib/stores';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { getChannels, getDMChannelByUserId } from '$lib/apis/channels';
 
 	import ChatBubbles from '$lib/components/icons/ChatBubbles.svelte';

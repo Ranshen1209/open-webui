@@ -4,7 +4,7 @@
 	import { getToolById, getTools, updateToolById } from '$lib/apis/tools';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import ToolkitEditor from '$lib/components/workspace/Tools/ToolkitEditor.svelte';
-	import { WEBUI_VERSION } from '$lib/constants';
+	import { WEBUI_VERSION } from '$lib/config/app';
 	import { tools } from '$lib/stores';
 	import { compareVersion, extractFrontmatter } from '$lib/utils';
 	import { onMount, getContext } from 'svelte';

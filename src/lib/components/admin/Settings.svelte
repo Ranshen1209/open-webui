@@ -5,7 +5,7 @@
 	import { toast } from 'svelte-sonner';
 
 	import { config } from '$lib/stores';
-	import { HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
 	import { getBackendConfig } from '$lib/apis';
 	import Database from './Settings/Database.svelte';
 

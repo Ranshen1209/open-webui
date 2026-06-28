@@ -17,7 +17,7 @@
 		updateUserTimezone
 	} from '$lib/apis/auths';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
 
 	import { generateInitialsImage, canvasPixelTest, getUserTimezone } from '$lib/utils';

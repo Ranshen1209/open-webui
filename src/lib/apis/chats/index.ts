@@ -1,4 +1,4 @@
-import { WEBUI_API_BASE_URL } from '$lib/constants';
+import { WEBUI_API_BASE_URL } from '$lib/config/app';
 import { getTimeRange } from '$lib/utils';
 
 export const createNewChat = async (token: string, chat: object, folderId: string | null) => {

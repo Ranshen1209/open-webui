@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import emojiShortCodes from '$lib/emoji-shortcodes.json';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 

@@ -4,7 +4,7 @@
 	import { onMount, getContext } from 'svelte';
 	import { addUser } from '$lib/apis/auths';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import Modal from '$lib/components/common/Modal.svelte';

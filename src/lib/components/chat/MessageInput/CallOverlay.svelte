@@ -13,7 +13,7 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import VideoInputMenu from './CallOverlay/VideoInputMenu.svelte';
 	import { KokoroWorker } from '$lib/workers/KokoroWorker';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	const i18n = getContext('i18n');
 

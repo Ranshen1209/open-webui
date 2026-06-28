@@ -17,7 +17,7 @@
 		settings
 	} from '$lib/stores';
 
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';

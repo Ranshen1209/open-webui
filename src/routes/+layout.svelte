@@ -62,7 +62,7 @@
 		removeTerminalConnection
 	} from '$lib/utils/connections';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/config/app';
 	import { bestMatchingLanguage, displayFileHandler, getUserTimezone } from '$lib/utils';
 	import { setTextScale } from '$lib/utils/text-scale';
 

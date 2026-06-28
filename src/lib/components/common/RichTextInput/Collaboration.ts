@@ -8,7 +8,7 @@ import {
 	prosemirrorJSONToYDoc
 } from 'y-prosemirror';
 import type { Socket } from 'socket.io-client';
-import type { SessionUser } from '$lib/stores';
+import type { SessionUser } from '$lib/types';
 import { Editor, Extension } from '@tiptap/core';
 import { keymap } from 'prosemirror-keymap';
 import { tick } from 'svelte';

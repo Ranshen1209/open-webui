@@ -2,7 +2,7 @@
 # Deploy alongside the main stack at /opt/stack/
 #
 # Usage:
-#   docker compose -f docker-compose.sakrylle-web.yml up -d
+#   docker compose -f deploy/docker-compose.sakrylle-web.yml up -d
 #
 # Prerequisites:
 #   1. Create /opt/stack/sakrylle-web/.env (mode 600) with required env vars

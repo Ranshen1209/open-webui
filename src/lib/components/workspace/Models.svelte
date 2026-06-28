@@ -12,7 +12,7 @@
 	const i18n = getContext('i18n');
 
 	import { WEBUI_NAME, config, mobile, models as _models, settings, user } from '$lib/stores';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/config/app';
 	import {
 		createNewModel,
 		deleteModelById,

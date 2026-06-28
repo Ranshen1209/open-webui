@@ -38,7 +38,7 @@
 	import ChatPlus from '../icons/ChatPlus.svelte';
 	import ChatCheck from '../icons/ChatCheck.svelte';
 	import Knobs from '../icons/Knobs.svelte';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	const i18n = getContext('i18n');
 

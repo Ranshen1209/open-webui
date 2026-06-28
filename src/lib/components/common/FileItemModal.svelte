@@ -5,7 +5,7 @@
 	import { getContext, onMount, tick } from 'svelte';
 
 	import { formatFileSize, getLineCount } from '$lib/utils';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	import { settings } from '$lib/stores';
 	import { getKnowledgeById } from '$lib/apis/knowledge';
 	import { getFileById, getFileContentById } from '$lib/apis/files';

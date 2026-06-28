@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { safeImageUrl } from '$lib/utils/safeImageUrl';
 
 	import { settings } from '$lib/stores';

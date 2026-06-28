@@ -11,7 +11,7 @@
 	import MicSolid from '$lib/components/icons/MicSolid.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import VoiceRecording from '$lib/components/chat/MessageInput/VoiceRecording.svelte';
-	import { HIDE_VOICE_FEATURES } from '$lib/constants';
+	import { HIDE_VOICE_FEATURES } from '$lib/constants/features';
 	export let show = false;
 
 	let name = $i18n.t('Untitled');

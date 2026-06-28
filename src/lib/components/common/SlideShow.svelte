@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { onMount } from 'svelte';
 
 	export let imageUrls = [

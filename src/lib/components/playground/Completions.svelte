@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount, tick, getContext } from 'svelte';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 	import { WEBUI_NAME, config, user, models, settings, showSidebar } from '$lib/stores';
 	import { chatCompletion } from '$lib/apis/openai';
 

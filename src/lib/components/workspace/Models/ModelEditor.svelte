@@ -3,7 +3,8 @@
 
 	import { onMount, getContext, tick } from 'svelte';
 	import { models, tools, functions, user } from '$lib/stores';
-	import { WEBUI_BASE_URL, DEFAULT_CAPABILITIES } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
+	import { DEFAULT_CAPABILITIES } from '$lib/constants/capabilities';
 
 	import { getTools } from '$lib/apis/tools';
 	import { getSkills } from '$lib/apis/skills';

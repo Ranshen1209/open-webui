@@ -4,7 +4,7 @@
 
 	import { user, config, settings } from '$lib/stores';
 	import { updateUserProfile, createAPIKey, getAPIKey, getSessionUser } from '$lib/apis/auths';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	import UpdatePassword from './Account/UpdatePassword.svelte';
 	import { getGravatarUrl } from '$lib/apis/utils';

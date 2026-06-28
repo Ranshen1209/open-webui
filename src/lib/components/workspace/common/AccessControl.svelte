@@ -5,7 +5,7 @@
 
 	import { getGroups, getGroupById, getGroupInfoById } from '$lib/apis/groups';
 	import { getUserInfoById } from '$lib/apis/users';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import Badge from '$lib/components/common/Badge.svelte';
 	import GlobeAlt from '$lib/components/icons/GlobeAlt.svelte';

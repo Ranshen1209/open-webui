@@ -11,7 +11,7 @@
 
 	import { capitalizeFirstLetter, formatFileSize } from '$lib/utils';
 
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_BASE_URL } from '$lib/config/app';
 
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Dropdown from '$lib/components/common/Dropdown.svelte';

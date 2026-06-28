@@ -5,7 +5,7 @@
 	import GarbageBin from '$lib/components/icons/GarbageBin.svelte';
 	import EditPencil from '$lib/components/icons/EditPencil.svelte';
 	import ArrowForward from '$lib/components/icons/ArrowForward.svelte';
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/config/app';
 
 	const i18n = getContext('i18n');
 
